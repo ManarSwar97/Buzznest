@@ -9,14 +9,23 @@ const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const morgan = require("morgan");
 const session = require("express-session")
+const passUserToView = require("./middleware/pass-user-to-view")
+const isSignedIn = require('./middleware/is-signed-in')
 
 //checking the port
 const port = process.env.PORT ? process.env.PORT : "3000";
-
+mongoose.connect(process.env.MONGODB_URI);
+mongoose.connection.on("connected", () => {
+  console.log(`Connected to MongoDB ${mongoose.connection.name}.`);
+});
 //Using Malware
 app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride("_method"));
 app.use(morgan('dev'));
+
+app.use(passUserToView)
+
+
 
 
 app.get('/', async(req, res)=>{
