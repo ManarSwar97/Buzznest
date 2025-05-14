@@ -4,6 +4,7 @@
 
 ### By: Manar Swar, Saleh Alsaegh, and Noor Faisal
 
+***
 #### [GitHub Repository](https://github.com/ManarSwar97/Buzznest)
 ***
 ### *Description About the Project*
