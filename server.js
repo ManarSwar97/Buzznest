@@ -3,13 +3,15 @@ dotenv.config();
 const express = require("express");
 const app = express();
 const moment = require('moment')
+const path = require('path');
+
 
 //Middleware section
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const morgan = require("morgan");
 const session = require("express-session")
-const passUserToView = require("./middleware/pass-user-to-view")
+//const passUserToView = require("./middleware/pass-user-to-view")
 const isSignedIn = require('./middleware/is-signed-in')
 
 //checking the port
@@ -22,8 +24,13 @@ mongoose.connection.on("connected", () => {
 app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride("_method"));
 app.use(morgan('dev'));
+app.set('view engine', 'ejs');
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(passUserToView)
+
+
+
+//app.use(passUserToView)
 
 
 
@@ -31,6 +38,9 @@ app.use(passUserToView)
 app.get('/', async(req, res)=>{
     res.render("index.ejs")
 })
+app.get('/home', (req, res) => {
+  res.render('home/home'); 
+});
 
 app.listen(port, () => {
   console.log(`The express app is ready on port ${port}!`);
