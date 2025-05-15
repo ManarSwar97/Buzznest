@@ -1,8 +1,5 @@
 const express = require("express")
-
-
 const router = express.Router()
-
 const User = require("../models/user")
 const bcrypt = require("bcrypt")
 router.get("/sign-up", async(req, res)=>{
@@ -80,5 +77,9 @@ router.post("/sign-in", async (req, res) => {
     res.redirect("/");
 });
 
+router.get("/sign-out", (req, res) => {
+    req.session.destroy()
+    res.redirect("/")
+  })
 
 module.exports = router
