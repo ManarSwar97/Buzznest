@@ -14,11 +14,16 @@ const passUserToView = require('./middleware/pass-user-to-view')
 const isSignedIn = require('./middleware/is-signed-in')
 
 //checking the port
-const port = process.env.PORT ? process.env.PORT : '3000'
-mongoose.connect(process.env.MONGODB_URI)
-mongoose.connection.on('connected', () => {
-  console.log(`Connected to MongoDB ${mongoose.connection.name}.`)
-})
+const port = process.env.PORT ? process.env.PORT : "3000";
+mongoose.connect(process.env.MONGODB_URI);
+mongoose.connection.on("connected", () => {
+  console.log(`Connected to MongoDB ${mongoose.connection.name}.`);
+});
+
+//importing model
+const Post = require('./models/post');
+const User = require('./models/user')
+
 //Using Malware
 app.use(express.urlencoded({ extended: false }))
 app.use(methodOverride('_method'))
@@ -27,32 +32,29 @@ app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true
-  })
-)
-app.get('/', async (req, res) => {
-  res.render('index.ejs')
-})
-const authentication = require('./controllers/user.js')
-app.use('/auth', authentication)
 
+app.use(
+    session({
+      secret: process.env.SESSION_SECRET,
+      resave: false,
+      saveUninitialized: true,
+    })
+  );
 app.use(passUserToView)
 
-app.get('/home', (req, res) => {
-  res.render('home/home')
-})
-//profile
+const authentication = require("./controllers/user")
+const postCtrl = require("./controllers/post")
 
+app.use("/auth", authentication);
+app.use("/posts", postCtrl);
+app.use("/home", isSignedIn, postCtrl);
 app.get('/profile', async (req, res) => {
   res.render('profile/profile.ejs') 
 })
+app.get("/", (req, res) => {
+  res.render("index.ejs");
+});
 
 app.listen(port, () => {
-  console.log(`The express app is ready on port ${port}!`)
-})
-
-//just a small note
+  console.log(`The express app is ready on port ${port}!`);
+});
