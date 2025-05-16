@@ -84,6 +84,9 @@ router.get("/sign-out", (req, res) => {
 
 
   //profile
-
+  //I took a reference from skyrockit lesson and some previous lessons.
+router.get("/profile", async (req,res)=>{
+    const currentUser = await User.findById(req.session.user._id);
+})
 
 module.exports = router
