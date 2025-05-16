@@ -1,19 +1,17 @@
-const dotenv = require("dotenv");
-dotenv.config();
-const express = require("express");
-const app = express();
+const dotenv = require('dotenv')
+dotenv.config()
+const express = require('express')
+const app = express()
 const moment = require('moment')
-const path = require('path');
-
+const path = require('path')
 
 //Middleware section
-const mongoose = require("mongoose");
-const methodOverride = require("method-override");
-const morgan = require("morgan");
-const session = require("express-session")
-const passUserToView = require("./middleware/pass-user-to-view")
+const mongoose = require('mongoose')
+const methodOverride = require('method-override')
+const morgan = require('morgan')
+const session = require('express-session')
+const passUserToView = require('./middleware/pass-user-to-view')
 const isSignedIn = require('./middleware/is-signed-in')
-
 
 //checking the port
 const port = process.env.PORT ? process.env.PORT : "3000";
@@ -27,12 +25,12 @@ const Post = require('./models/post');
 const User = require('./models/user')
 
 //Using Malware
-app.use(express.urlencoded({ extended: false }));
-app.use(methodOverride("_method"));
-app.use(morgan('dev'));
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: false }))
+app.use(methodOverride('_method'))
+app.use(morgan('dev'))
+app.set('view engine', 'ejs')
+app.set('views', path.join(__dirname, 'views'))
+app.use(express.static(path.join(__dirname, 'public')))
 
 
 app.use(
@@ -44,16 +42,15 @@ app.use(
   );
 app.use(passUserToView)
 
-
-
-
 const authentication = require("./controllers/user")
 const postCtrl = require("./controllers/post")
 
 app.use("/auth", authentication);
 app.use("/posts", postCtrl);
 app.use("/home", isSignedIn, postCtrl);
-
+app.get('/profile', async (req, res) => {
+  res.render('profile/profile.ejs') 
+})
 app.get("/", (req, res) => {
   res.render("index.ejs");
 });

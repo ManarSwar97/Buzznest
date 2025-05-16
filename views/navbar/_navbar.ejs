@@ -1,10 +1,10 @@
 <style>
-body {
+  body {
     margin: 0;
     height: 100vh;
-}
+  }
 
-nav {
+  nav {
     /* From https://css.glass */
     background: rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -13,46 +13,45 @@ nav {
     border: 1px solid rgba(255, 255, 255, 0.3);
     padding: 20px 20px;
     color: #9d99b1;
-}
+  }
 
-.headerr {
+  .headerr {
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: relative;
-}
+  }
 
-.header a,
-.main-header a,
-.sign-out a {
+  .header a,
+  .main-header a,
+  .sign-out a {
     color: white;
     text-decoration: none;
     margin: 0 10px;
     font-size: 20px;
     font-family: Georgia, 'Times New Roman', Times, serif;
-}
-.main-header {
+  }
+  .main-header {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     gap: 20px;
-}
+  }
 </style>
 
-
 <nav>
-<div class="headerr">
+  <div class="headerr">
     <div class="header">
-    <a href="">BuzzNest</a>
+      <a href="">BuzzNest</a>
     </div>
     <div class="main-header">
-    <a href="">Home</a>
-    <a href="">Groups</a>
-    <a href="">Profile</a>
+      <a href="">Home</a>
+      <a href="">Groups</a>
+      <a href="/profile/profile">Profile</a>
     </div>
     <div class="sign-out">
-    <a href="">Sign Out</a>
-</div>
-</div>
+      <a href="">Sign Out</a>
+    </div>
+  </div>
 </nav>
