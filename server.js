@@ -36,13 +36,22 @@ app.use(
       saveUninitialized: true,
     })
   );
+app.use(passUserToView)
 app.get('/', async(req, res)=>{
     res.render("index.ejs")
 })
-const authentication = require("./controllers/user.js")
-app.use("/auth", authentication)
 
-app.use(passUserToView)
+
+
+
+const authentication = require("./controllers/user")
+const postCtrl = require("./controllers/post")
+
+app.use("/auth", authentication)
+app.use("/posts", postCtrl)
+
+
+
 
 app.get('/home', (req, res) => {
   res.render('home/home'); 
@@ -51,5 +60,3 @@ app.get('/home', (req, res) => {
 app.listen(port, () => {
   console.log(`The express app is ready on port ${port}!`);
 });
-
-//just a small note 
