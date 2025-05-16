@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add a New Post</title>
+</head>
+<body>
+    <%- include('../navbar/_navbar.ejs')%>
+    <h2>Add a New Post</h2>
+    <form action="/posts" method="POST">
+        <label for="postTitle">Add Post Title</label>
+        <input type="text" name="postTitle" id="postTitle">
+        <br>
+        <label for="postText">Add Post Description</label>
+        <input type="text" name="postText" id="postText">
+        <br>
+        <label for="postImage">Add Post Image</label>
+        <input type="file" id="postImage" name="postImage" required />
+        <br>
+        <button type="submit">Add Post</button>
+    </form>
+</body>
+</html>
