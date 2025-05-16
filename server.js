@@ -48,7 +48,7 @@ app.get('/home', (req, res) => {
 //profile
 
 app.get('/profile', async (req, res) => {
-  res.render('profile/profile') // No .ejs extension needed
+  res.render('profile/profile.ejs') 
 })
 
 app.listen(port, () => {

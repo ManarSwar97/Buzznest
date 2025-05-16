@@ -82,4 +82,8 @@ router.get("/sign-out", (req, res) => {
     res.redirect("/")
   })
 
+
+  //profile
+
+
 module.exports = router
