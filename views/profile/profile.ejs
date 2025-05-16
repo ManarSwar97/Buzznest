@@ -1,7 +1,13 @@
-<h1>Hello <%= user.username %></h1>>
+<!-- I looked at a reference from MEN STACK AUTH LESSON  -->
+
+<% if (user) { %>
+<h1>Hello <%= user.username %>!</h1>
 <ul>
-  <li>First Name: <%= user.firstName %></li>
-  <li>last Name <%= user.lastName %></li>
-  <li>Email <%= user.email %></li>
-  <li><img src="<%= user.image %>" alt="User Image"></li>
+  <li>Name: <%= user.firstName %></li>
+  <li>Last Name: <%= user.lastName %></li>
+  <li>Email address: <%= user.email %></li>
+  <li><img src="<%= user.image %>" alt="User Image" /></li>
 </ul>
+<% } else { %>
+<h1>User not Found, Please Sign in!</h1>
+<% } %>
