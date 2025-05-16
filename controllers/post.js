@@ -24,6 +24,16 @@ router.post("/", async (req, res) => {
     }
 });
 
+router.get('/', async(req, res) => {
+    try {
+        const displayPosts = await Post.find({}).populate('user');
+        res.render('home/home', { posts: displayPosts });
+    } catch (error) {
+        console.log(error);
+        res.redirect('/');
+    }
+});
+
 
 
 

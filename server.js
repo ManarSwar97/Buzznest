@@ -21,6 +21,11 @@ mongoose.connect(process.env.MONGODB_URI);
 mongoose.connection.on("connected", () => {
   console.log(`Connected to MongoDB ${mongoose.connection.name}.`);
 });
+
+//importing model
+const Post = require('./models/post');
+const User = require('./models/user')
+
 //Using Malware
 app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride("_method"));
@@ -28,6 +33,7 @@ app.use(morgan('dev'));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.use(
     session({
@@ -37,9 +43,6 @@ app.use(
     })
   );
 app.use(passUserToView)
-app.get('/', async(req, res)=>{
-    res.render("index.ejs")
-})
 
 
 
@@ -47,14 +50,12 @@ app.get('/', async(req, res)=>{
 const authentication = require("./controllers/user")
 const postCtrl = require("./controllers/post")
 
-app.use("/auth", authentication)
-app.use("/posts", postCtrl)
+app.use("/auth", authentication);
+app.use("/posts", postCtrl);
+app.use("/home", isSignedIn, postCtrl);
 
-
-
-
-app.get('/home', (req, res) => {
-  res.render('home/home'); 
+app.get("/", (req, res) => {
+  res.render("index.ejs");
 });
 
 app.listen(port, () => {
