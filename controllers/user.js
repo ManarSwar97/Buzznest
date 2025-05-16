@@ -41,13 +41,14 @@ router.post("/sign-up", async (req, res) => {
 
     });
 
-    req.session.newUser = {
+    req.session.user = {
         firstName: newUser.firstName,
         lastName: newUser.lastName,
         email: newUser.email,
         username: newUser.username,
         image: newUser.image,
-    };
+        _id: newUser._id,
+    }
 
     req.session.save(() => {
         res.redirect("/");
