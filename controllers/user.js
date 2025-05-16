@@ -74,7 +74,7 @@ router.post("/sign-in", async (req, res) => {
         username: existingUser.username,
         _id: existingUser._id
     };
-    res.redirect("/");
+    res.redirect("/home");
 });
 
 router.get("/sign-out", (req, res) => {
