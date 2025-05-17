@@ -34,8 +34,31 @@ router.get('/', async(req, res) => {
     }
 });
 
+router.get('/:postId', async (req, res)=>{
+    try{
+        const showPost = await Post.findById(req.params.postId).populate('user')
+        res.render('posts/show.ejs', {
+            posts: showPost
+        })
 
+    }
+    catch (error) {
+    console.log(error);
+    res.redirect('/');
+  }
+})
 
+router.delete('/:postId', async(req, res)=>{
+    try{
+        const deletePost = await Post.findById(req.params.postId)
+        await deletePost.deleteOne();
+        res.redirect('/home');
+    }
+    catch (error) {
+    console.log(error);
+    res.redirect('/');
+  }
+})
 
 
 module.exports = router;

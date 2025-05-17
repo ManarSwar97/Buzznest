@@ -21,7 +21,6 @@
 
     <div class="recent-post">
 
-      <h2>Recent Posts</h2>
         <h2>Recent Posts</h2>
         <div class="new-post">
             <% posts.forEach((post) => {%>
@@ -29,7 +28,7 @@
                 <h5>Posted by <%= post.user.username %></h5>
                 <p><%= post.postText %></p>
                 <img src="/<%= post.postImage %>" alt="Post Image" width="200">
-
+                <a href="/posts/<%= post._id %>">View more details.</a>
                 <%})%>
         </div>
     </div>

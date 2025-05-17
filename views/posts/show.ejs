@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= posts.postTitle %></title>
+</head>
+<body>
+    <%- include('../navbar/_navbar.ejs')%>
+    <h2><%= posts.postTitle %></h2>
+    <h5>Posted by <%= posts.user.username %></h5>
+    <p><%= posts.postText %></p>
+    <img src="/<%= posts.postImage %>" alt="Post Image" width="200">
+
+<form action="/posts/<%= posts._id %>?_method=DELETE" method="POST">
+  <button type="submit">Delete this Post</button>
+</form>
+</body>
+</html>
