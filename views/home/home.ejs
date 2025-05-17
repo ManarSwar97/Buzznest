@@ -4,33 +4,31 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home Page</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
   </head>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      background-color: #9d99b1;
-    }
-  </style>
   <body>
     <%- include('../navbar/_navbar.ejs')%>
     <div class="banner">
       <img src="/banner.png" alt="Banner Image" width="100%" height="700px" />
     </div>
-    <a href="/posts/new">Add a New Post</a>
+<a href="/posts/new">Add a New Post</a>
 
-    <div class="recent-post">
-
-        <h2>Recent Posts</h2>
-        <div class="new-post">
-            <% posts.forEach((post) => {%>
-                <h2><%= post.postTitle %></h2>
-                <h5>Posted by <%= post.user.username %></h5>
-                <p><%= post.postText %></p>
-                <img src="/<%= post.postImage %>" alt="Post Image" width="200">
-                <a href="/posts/<%= post._id %>">View more details.</a>
-                <%})%>
+<div class="recent-post">
+    <h2>Recent Posts</h2>
+    <div class="new-post">
+        <% posts.forEach((post) => { %>
+        <div class="post-card">
+            <div class="post-header">
+                <img src="/profile/<%= post.user.image %>" alt="User Image">
+                <h4>@<%= post.user.username %></h4>
+            </div>
+            <h2><%= post.postTitle %></h2>
+            <p><%= post.postText %></p>
+            <a href="/posts/<%= post._id %>">View more details</a>
         </div>
+        <% }) %>
     </div>
+</div>
+
   </body>
 </html>

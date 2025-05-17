@@ -1,0 +1,95 @@
+body {
+    background-color: #9d99b1;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Playfair Display', serif;
+    padding: 60px 0;
+}
+
+.form {
+    border: 5px solid white;
+    padding: 60px 40px;
+    border-radius: 20px;
+    background-color: #ffffff20;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+h3 {
+    color: #2d155a;
+    font-size: 35px;
+    margin-bottom: 30px;
+}
+
+.form-display {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+label {
+    color: #2d155a;
+    font-size: 23px;
+    width: 140px;
+    text-align: left;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="file"] {
+    width: 230px;
+    height: 40px;
+    padding: 5px 10px;
+    font-size: 16px;
+    font-family: 'Playfair Display', serif;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+button {
+    width: 150px;
+    height: 40px;
+    background-color: white;
+    color: #2d155a;
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #eee;
+}
+
+.link-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.link-container p {
+    font-size: 16px;
+    color: #2d155a;
+    text-align: center;
+    margin: 0;
+}
+
+a {
+    color: #2d155a;
+    text-decoration: underline;
+    font-size: 17px;
+}
