@@ -5,6 +5,9 @@ const app = express()
 const moment = require('moment')
 const path = require('path')
 
+const groupController = require('../controllers/groupController');
+const gameController = require('../controllers/gameController');
+
 //Middleware section
 const mongoose = require('mongoose')
 const methodOverride = require('method-override')
@@ -54,6 +57,19 @@ app.get('/profile', async (req, res) => {
 app.get("/", (req, res) => {
   res.render("index.ejs");
 });
+
+// Game routes
+router.get('/games', gameController.listGames);
+router.get('/games/new', gameController.showGameForm);
+router.post('/games', gameController.createGame);
+router.get('/games/:id', gameController.showGame);
+router.delete('/games/:id', gameController.deleteGame);
+
+// Group routes (nested under games)
+router.get('/games/:gameId/groups/new', groupController.showGroupForm);
+router.post('/games/:gameId/groups', groupController.createGroup);
+router.delete('/games/:gameId/groups/:id', groupController.deleteGroup);
+
 
 app.listen(port, () => {
   console.log(`The express app is ready on port ${port}!`);

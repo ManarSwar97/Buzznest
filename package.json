@@ -13,7 +13,7 @@
   },
   "name": "buzznest",
   "version": "1.0.0",
-  "description": "",
+  "description": "***\r #### [GitHub Repository](https://github.com/ManarSwar97/Buzznest)\r ***\r ### *Description About the Project*\r #### BuzzNest is a dynamic gaming hub, designed to the gaming community in a way similar to Reddit, but with a unique twist. It’s a platform where gamers can come together to discuss the latest releases, share insights, post reviews, glitches, patch notes  and engage .",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -29,5 +29,6 @@
   "bugs": {
     "url": "https://github.com/ManarSwar97/Buzznest/issues"
   },
-  "homepage": "https://github.com/ManarSwar97/Buzznest#readme"
+  "homepage": "https://github.com/ManarSwar97/Buzznest#readme",
+  "type": "commonjs"
 }

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= group.groupName %> Details</title>
+    <style>
+        .group-details {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="group-details">
+        <h1><%= group.groupName %></h1>
+        <p>Part of game: <a href="/games/<%= group.game._id %>"><%= group.game.gameName %></a></p>
+        
+        <div class="actions">
+            <form action="/games/<%= group.game._id %>/groups/<%= group._id %>?_method=DELETE" 
+                  method="POST">
+                <button type="submit">Delete Group</button>
+            </form>
+            <a href="/games/<%= group.game._id %>">← Back to Game</a>
+        </div>
+    </div>
+</body>
+</html>

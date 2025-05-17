@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Group to <%= game.gameName %></title>
+    <style>
+        form {
+            max-width: 500px;
+            margin: 20px auto;
+        }
+        label {
+            display: block;
+            margin: 10px 0;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Add Group to <%= game.gameName %></h1>
+    
+    <form action="/games/<%= game._id %>/groups" method="POST">
+        <label>
+            Group Name:
+            <input type="text" name="groupName" required>
+        </label>
+        
+        <div class="form-actions">
+            <button type="submit">Create Group</button>
+            <a href="/games/<%= game._id %>">Cancel</a>
+        </div>
+    </form>
+</body>
+</html>
