@@ -10,7 +10,7 @@
     <h2><%= posts.postTitle %></h2>
     <h5>Posted by <%= posts.user.username %></h5>
     <p><%= posts.postText %></p>
-    <img src="/<%= posts.postImage %>" alt="Post Image" width="200">
+    <img src="/post/<%= posts.postImage %>" alt="Post Image" width="200">
 
 <form action="/posts/<%= posts._id %>?_method=DELETE" method="POST">
   <button type="submit">Delete this Post</button>

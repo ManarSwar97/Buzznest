@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
+body {
+    background-color: #9d99b1;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form {
+    border: 5px solid white;
+    padding: 60px;
+    border-radius: 10%;
+    background-color: white; 
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+label {
+    color: #2d155a;
+    font-size: 20px;
+    font-family: 'Playfair Display', serif;
+    width: 100px;
+    margin-right: 10px;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 250px;
+    height: 40px;
+    padding: 5px 10px;
+    font-size: 16px;
+    font-family: 'Playfair Display', serif;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+h3 {
+    color: #2d155a;
+    font-size: 35px;
+    font-family: 'Playfair Display', serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+button {
+    width: 150px;
+    height: 40px;
+    background-color: #2d155a;
+    color: white;
+    font-size: 20px;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.link-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.link-container p {
+    font-size: 16px;
+    color: #2d155a;
+    text-align: center;
+}
+
