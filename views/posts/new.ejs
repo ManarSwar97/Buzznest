@@ -1,24 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add a New Post</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add a New Post</title>
+  <link rel="stylesheet" href="/stylesheets/style5.css" />
 </head>
 <body>
-    <%- include('../navbar/_navbar.ejs')%>
-    <h2>Add a New Post</h2>
+  <%- include('../navbar/_navbar.ejs') %>
+<div class="new-form">
+  <div class="form">
+    <h3>Add a New Post</h3>
     <form action="/posts" method="POST">
-        <label for="postTitle">Add Post Title</label>
-        <input type="text" name="postTitle" id="postTitle">
-        <br>
-        <label for="postText">Add Post Description</label>
+      <div class="form-group">
+        <label for="postTitle">Post Title</label>
+        <input type="text" name="postTitle" id="postTitle" required />
+      </div>
+
+      <div class="form-group">
+        <label for="postText">Description</label>
         <textarea name="postText" id="postText" placeholder="Game Description" required></textarea>
-        <br>
-        <label for="postImage">Add Post Image</label>
+      </div>
+
+      <div class="form-group">
+        <label for="postImage">Image</label>
         <input type="file" id="postImage" name="postImage" required />
-        <br>
+      </div>
+
+      <div class="button-container">
         <button type="submit">Add Post</button>
+      </div>
     </form>
+  </div>
+  </div>
 </body>
 </html>

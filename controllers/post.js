@@ -75,7 +75,7 @@ router.put('/:postId', async(req, res)=>{
     try{
         const updatePost = await Post.findById(req.params.postId)
         await updatePost.updateOne(req.body);
-        res.redirect(`/posts/${req.params.postId}/edit`);
+        res.redirect(`/posts/${req.params.postId}`);
 
     }
     catch (error) {
