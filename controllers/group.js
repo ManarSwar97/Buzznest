@@ -8,7 +8,7 @@ const Game = require('../models/game');
 
 
 
-exports.index = async (req, res) => {
+router.index = async (req, res) => {
     try {
         const games = await Game.find().lean();
         const gamesWithGroups = await Promise.all(games.map(async game => {
