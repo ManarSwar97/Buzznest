@@ -13,7 +13,7 @@ body {
     border: 5px solid white;
     padding: 60px 40px;
     border-radius: 20px;
-    background-color: #ffffff20;
+    background-color: #ffffff;
     width: 100%;
     max-width: 450px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -37,20 +37,21 @@ label {
     color: #2d155a;
     font-size: 23px;
     width: 140px;
-    text-align: left;
+    text-align: right;
+    padding-right: 10px;
 }
 
 input[type="text"],
 input[type="password"],
 input[type="file"] {
-    width: 230px;
+    width: 250px;
     height: 40px;
-    padding: 5px 10px;
+    padding: 5px 20px;
     font-size: 16px;
     font-family: 'Playfair Display', serif;
     border: 1px solid #ccc;
     border-radius: 5px;
-    background-color: #fff;
+    background-color: #e6e5ec;
 }
 
 .button-container {
@@ -62,19 +63,16 @@ input[type="file"] {
 button {
     width: 150px;
     height: 40px;
-    background-color: white;
-    color: #2d155a;
+    background-color: #2d155a;
+    color: white;
     font-size: 20px;
     border: none;
-    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    border-radius: 5px;
 }
-
-button:hover {
-    background-color: #eee;
-}
-
 .link-container {
     margin-top: 20px;
     display: flex;
