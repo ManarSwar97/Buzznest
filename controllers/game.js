@@ -1,5 +1,3 @@
-
-
 const Game = require("../models/game");
 
 exports.listGames = async (req, res) => {

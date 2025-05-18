@@ -5,8 +5,7 @@ const app = express()
 const moment = require('moment')
 const path = require('path')
 
-const groupController = require('../controllers/groupController');
-const gameController = require('../controllers/gameController');
+
 
 //Middleware section
 const mongoose = require('mongoose')
@@ -47,6 +46,9 @@ app.use(passUserToView)
 
 const authentication = require("./controllers/user")
 const postCtrl = require("./controllers/post")
+const groupController = require('./controllers/group');
+const gameController = require('./controllers/game');
+
 
 app.use("/auth", authentication);
 app.use("/posts", postCtrl);
