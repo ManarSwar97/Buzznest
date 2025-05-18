@@ -88,7 +88,6 @@ router.get('/sign-out', (req, res) => {
 //https://www.bennadel.com/blog/2154-i-finally-understand-the-finally-part-of-a-try-catch-control-statemen
 // //https://stackoverflow.com/questions/42013104/placement-of-catch-before-and-after-thent.htm
 
-
 router.get('/profile', (req, res) => {
   if (!req.session.user) {
     res.redirect('/sign-in')
@@ -101,7 +100,6 @@ router.get('/profile', (req, res) => {
         res.redirect('/')
         return
       }
-  
 
       res.render('profile/profile.ejs', { user })
     })
@@ -110,5 +108,7 @@ router.get('/profile', (req, res) => {
       res.send('Something went wrong!')
     })
 })
+
+//comment
 
 module.exports = router
