@@ -1,3 +1,8 @@
+
+const express = require("express")
+const router = express.Router()
+
+
 const Group = require('../models/group');
 const Game = require('../models/game');
 
@@ -50,3 +55,5 @@ exports.deleteGroup = async (req, res) => {
     res.redirect(`/games/${req.params.gameId}`);
   }
 };
+
+module.exports = router;
