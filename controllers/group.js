@@ -1,3 +1,9 @@
+
+const express = require("express")
+const router = express.Router()
+
+
+const Group = require('../models/groups');
 const Group = require('../models/groups');
 const Game = require('../models/game');
 
@@ -17,7 +23,7 @@ exports.index = async (req, res) => {
     }
 };
 
-exports.showGroupForm = async (req, res) => {
+router.showGroupForm = async (req, res) => {
   try {
     const game = await Game.findById(req.params.gameId);
     res.render('groups/new', { game });
@@ -27,7 +33,7 @@ exports.showGroupForm = async (req, res) => {
   }
 };
 
-exports.createGroup = async (req, res) => {
+router.createGroup = async (req, res) => {
   try {
     const group = new Group({
       groupName: req.body.groupName,
@@ -41,7 +47,7 @@ exports.createGroup = async (req, res) => {
   }
 };
 
-exports.deleteGroup = async (req, res) => {
+router.deleteGroup = async (req, res) => {
   try {
     await Group.findByIdAndDelete(req.params.id);
     res.redirect(`/games/${req.params.gameId}`);
@@ -50,3 +56,5 @@ exports.deleteGroup = async (req, res) => {
     res.redirect(`/games/${req.params.gameId}`);
   }
 };
+
+module.exports = router;

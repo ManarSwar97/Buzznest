@@ -58,19 +58,19 @@ app.get("/", (req, res) => {
   res.render("index.ejs");
 });
 
-const groupController = require('../controllers/group.js');
-const gameController = require('../controllers/game.js');
+const groupController = require('./controllers/group.js');
+const gameController = require('./controllers/game.js');
 // Game routes
-router.get('/games', gameController.listGames);
-router.get('/games/new', gameController.showGameForm);
-router.post('/games', gameController.createGame);
-router.get('/games/:id', gameController.showGame);
-router.delete('/games/:id', gameController.deleteGame);
+app.get('/games', gameController.listGames);
+app.get('/games/new', gameController.showGameForm);
+app.post('/games', gameController.createGame);
+app.get('/games/:id', gameController.showGame);
+app.delete('/games/:id', gameController.deleteGame);
 
 // Group routes (nested under games)
-router.get('/games/:gameId/groups/new', groupController.showGroupForm);
-router.post('/games/:gameId/groups', groupController.createGroup);
-router.delete('/games/:gameId/groups/:id', groupController.deleteGroup);
+app.get('/games/:gameId/groups/new', groupController.showGroupForm);
+app.post('/games/:gameId/groups', groupController.createGroup);
+app.delete('/games/:gameId/groups/:id', groupController.deleteGroup);
 
 
 app.listen(port, () => {
