@@ -3,7 +3,6 @@ const router = express.Router()
 const Post = require("../models/post")
 const User = require("../models/user");
 
-
 router.get("/new", (req, res)=>{
     res.render("posts/new.ejs")
 })
@@ -60,5 +59,28 @@ router.delete('/:postId', async(req, res)=>{
   }
 })
 
+router.get('/:postId/edit', async(req, res)=>{
+    try{
+        const editPost = await Post.findById(req.params.postId)
+        res.render('posts/edit.ejs', {
+            posts: editPost
+        })
+    }
+    catch (error) {
+    console.log(error);
+    res.redirect('/');
+  }
+})
+router.put('/:postId', async(req, res)=>{
+    try{
+        const updatePost = await Post.findById(req.params.postId)
+        await updatePost.updateOne(req.body);
+        res.redirect(`/posts/${req.params.postId}/edit`);
 
+    }
+    catch (error) {
+    console.log(error);
+    res.redirect('/');
+  }
+})
 module.exports = router;

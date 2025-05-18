@@ -15,5 +15,8 @@
 <form action="/posts/<%= posts._id %>?_method=DELETE" method="POST">
   <button type="submit">Delete this Post</button>
 </form>
+<form action="/posts/<%= posts._id %>?_method=PUT" method="POST">
+  <button type="submit">Edit this Post</button>
+</form>
 </body>
 </html>

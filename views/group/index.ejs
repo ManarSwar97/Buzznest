@@ -48,7 +48,6 @@
     <h1>All Groups Organized by Game</h1>
     <a href="/games">← View Games List</a>
 
-    <% if (gamesWithGroups.length > 0) { %>
         <% gamesWithGroups.forEach(game => { %>
             <div class="game-section">
                 <div class="game-header">
@@ -80,8 +79,5 @@
                 <% } %>
             </div>
         <% }); %>
-    <% } else { %>
-        <p>No games with groups found. <a href="/games/new">Create a game</a> first.</p>
-    <% } %>
 </body>
 </html>

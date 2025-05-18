@@ -54,13 +54,13 @@ app.use("/home", isSignedIn, postCtrl);
 app.get('/profile', async (req, res) => {
   res.render('profile/profile.ejs') 
 })
+app.get('/group/index', async (req, res) => {
+  res.render('group/index.ejs') 
+})
 app.get("/", (req, res) => {
   res.render("index.ejs");
 });
 
-const groupController = require('./controllers/group.js');
-const gameController = require('./controllers/game.js');
-// Game routes
 app.get('/games', gameController.listGames);
 app.get('/games/new', gameController.showGameForm);
 app.post('/games', gameController.createGame);
