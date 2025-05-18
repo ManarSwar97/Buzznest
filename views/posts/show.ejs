@@ -1,22 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= posts.postTitle %></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= posts.postTitle %></title>
+  <link rel="stylesheet" href="/stylesheets/style4.css"> 
 </head>
 <body>
-    <%- include('../navbar/_navbar.ejs')%>
-    <h2><%= posts.postTitle %></h2>
-    <h5>Posted by <%= posts.user.username %></h5>
-    <p><%= posts.postText %></p>
-    <img src="/post/<%= posts.postImage %>" alt="Post Image" width="200">
+  <%- include('../navbar/_navbar.ejs') %>
 
-<form action="/posts/<%= posts._id %>?_method=DELETE" method="POST">
-  <button type="submit">Delete this Post</button>
-</form>
-<form action="/posts/<%= posts._id %>?_method=PUT" method="POST">
-  <button type="submit">Edit this Post</button>
-</form>
+  <div class="new-post">
+    <div class="post-card">
+      <div class="post-header">
+        <img src="/profile/<%= posts.user.image %>"/>
+        <h4>@<%= posts.user.username %></h4>
+      </div>
+      <div class="content">
+      <h2><%= posts.postTitle %></h2>
+      <p><%= posts.postText %></p>
+      <img src="/post/<%= posts.postImage %>" alt="Post Image" width="100%" style="max-width: 500px; border-radius: 10px; margin-top: 10px;">
+      </div>
+      <div class="button-container">
+        <form action="/posts/<%= posts._id %>?_method=DELETE" method="POST" style="margin-right: 10px;">
+          <button type="submit">Delete</button>
+        </form>
+        <form action="/posts/<%= posts._id %>/edit" method="GET">
+          <button type="submit">Edit</button>
+        </form>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
