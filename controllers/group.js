@@ -1,4 +1,4 @@
-const Group = require('../models/group');
+const Group = require('../models/groups');
 const Game = require('../models/game');
 
 
