@@ -5,8 +5,6 @@ const app = express()
 const moment = require('moment')
 const path = require('path')
 
-const groupController = require('../controllers/groupController');
-const gameController = require('../controllers/gameController');
 
 //Middleware section
 const mongoose = require('mongoose')
@@ -58,6 +56,8 @@ app.get("/", (req, res) => {
   res.render("index.ejs");
 });
 
+const groupController = require('../controllers/group.js');
+const gameController = require('../controllers/game.js');
 // Game routes
 router.get('/games', gameController.listGames);
 router.get('/games/new', gameController.showGameForm);

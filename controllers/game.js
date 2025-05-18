@@ -1,5 +1,6 @@
 
-
+const express = require("express")
+const router = express.Router()
 const Game = require("../models/game");
 
 exports.listGames = async (req, res) => {
@@ -48,3 +49,6 @@ exports.deleteGame = async (req, res) => {
     res.redirect(`/games/${req.params.id}`);
   }
 };
+
+
+module.exports = router;
