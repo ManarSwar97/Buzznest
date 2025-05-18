@@ -2,8 +2,10 @@
 const express = require("express")
 const router = express.Router()
 const Game = require("../models/game");
+const User = require("../models/user");
 
-exports.listGames = async (req, res) => {
+
+router.listGames = async (req, res) => {
   try {
     const games = await Game.find();
     res.render('games/list', { games });
@@ -13,13 +15,13 @@ exports.listGames = async (req, res) => {
   }
 };
 
-exports.showGameForm = (req, res) => {
+router.showGameForm = (req, res) => {
   res.render('games/new');
 };
 
-exports.createGame = async (req, res) => {
+router.createGame = async (req, res) => {
   try {
-    const game = new Game({ gameName: req.body.gameName });
+  const game = new Game({ gameName: req.body.gameName });
     await game.save();
     res.redirect('/games');
   } catch (error) {
@@ -28,7 +30,7 @@ exports.createGame = async (req, res) => {
   }
 };
 
-exports.showGame = async (req, res) => {
+router.showGame = async (req, res) => {
   try {
     const game = await Game.findById(req.params.id);
     const groups = await Group.find({ game: req.params.id }).populate('game');
@@ -39,7 +41,7 @@ exports.showGame = async (req, res) => {
   }
 };
 
-exports.deleteGame = async (req, res) => {
+router.deleteGame = async (req, res) => {
   try {
     await Game.findByIdAndDelete(req.params.id);
     // Groups will remain but their game reference will be dangling
