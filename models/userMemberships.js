@@ -4,12 +4,6 @@ const userMembershipSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'groups',
     },
-    groupName:{
-        type: String,
-    },
-    groupImage:{
-        type: String,
-    },
     user:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user',   

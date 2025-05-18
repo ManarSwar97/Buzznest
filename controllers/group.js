@@ -1,8 +1,6 @@
 
 const express = require("express")
 const router = express.Router()
-
-
 const Group = require('../models/groups');
 const Game = require('../models/game');
 
@@ -15,7 +13,7 @@ router.index = async (req, res) => {
             const groups = await Group.find({ game: game._id });
             return { ...game, groups };
         }));
-        res.render('groups/index', { gamesWithGroups });
+        res.render('group/index', { gamesWithGroups });
     } catch (error) {
         console.log(error);
         res.redirect('/');
@@ -25,7 +23,7 @@ router.index = async (req, res) => {
 router.showGroupForm = async (req, res) => {
   try {
     const game = await Game.findById(req.params.gameId);
-    res.render('groups/new', { game });
+    res.render('group/new', { game });
   } catch (error) {
     console.log(error);
     res.redirect(`/games/${req.params.gameId}`);

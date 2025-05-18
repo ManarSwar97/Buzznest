@@ -3,9 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit post</title>
+    <title>Edit <%= posts.postTitle %></title>
 </head>
 <body>
-    
+    <%- include('../navbar/_navbar.ejs')%>
+    <h1>Edit the Post</h1>
+    <form action="/posts/<%= posts._id %>?_method=PUT" method="POST">
+        <label for="postTitle">Add Post Title</label>
+        <input type="text" name="postTitle" id="postTitle" value="<%= posts.postTitle %>">
+        <br>
+        <label for="postText">Add Post Description</label>
+        <textarea name="postText" id="postText" placeholder="Game Description"><%= posts.postText %></textarea>
+        <br>
+        <label for="postImage">Add Post Image</label>
+        <input type="file" id="postImage" name="postImage" value="<%= posts.postImage %>"/>
+        <br>
+        <button type="submit">Add Post</button>
+    </form>
 </body>
 </html>

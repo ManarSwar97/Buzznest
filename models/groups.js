@@ -5,11 +5,14 @@ const groupSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  groupImage:{
+        type: String,
+  },
   game: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Game',
     required: true
-  }
+  },
 });
 
 module.exports = mongoose.model('Group', groupSchema);
