@@ -57,8 +57,11 @@ app.listen(port, () => {
 
 
 //comment
-const commentRoutes = require('./routes/commentRoutes');
-app.use('/comments', commentRoutes);
+app.get('/comments', async (req, res) => {
+  res.render('comment/comment.ejs');
+});
+
+
 
 
 
