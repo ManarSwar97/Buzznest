@@ -55,4 +55,11 @@ app.listen(port, () => {
   console.log(`The express app is ready on port ${port}!`)
 })
 
+
+//comment
+const commentRoutes = require('./routes/commentRoutes');
+app.use('/comments', commentRoutes);
+
+
+
 //just a small note

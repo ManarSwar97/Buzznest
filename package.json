@@ -7,13 +7,13 @@
     "express-session": "^1.18.1",
     "method-override": "^3.0.0",
     "moment": "^2.30.1",
-    "mongoose": "^8.14.3",
+    "mongoose": "^8.15.0",
     "morgan": "^1.10.0",
     "session": "^0.1.0"
   },
   "name": "buzznest",
   "version": "1.0.0",
-  "description": "",
+  "description": "***\r #### [GitHub Repository](https://github.com/ManarSwar97/Buzznest)\r ***\r ### *Description About the Project*\r #### BuzzNest is a dynamic gaming hub, designed to the gaming community in a way similar to Reddit, but with a unique twist. It’s a platform where gamers can come together to discuss the latest releases, share insights, post reviews, glitches, patch notes  and engage .",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

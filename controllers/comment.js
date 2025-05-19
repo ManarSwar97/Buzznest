@@ -1,25 +1,32 @@
-const comment = require("../models/comment");
+const express = require('express');
+const router = express.Router();
+const Comment = require('../models/commentModel');
 
-
-const getForm = (req, res)=>{
-  res.render("comment-form");
-};
-
-
-
-
-const postComment = async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    await Comment.create({
-      comment: req.body.comment,
-      post: req.body.postId
-    });
-
-    res.redirect('/comment-form'); 
-  } catch (err) {
-    console.log(err);
-    res.redirect('/comment-form?error=1'); 
+    const comments = await Comment.find().populate('user', 'username');
+    res.render('comment/comment.ejs', { comments });
+  } catch (error) {
+    console.error(error);
+    res.send('Error retrieving comments.');
   }
-};
+});
 
-module.exports= router
+router.post('/', async (req, res) => {
+  try {
+    const { comment, user, post, group } = req.body;
+
+    if (!comment) {
+      return res.send('Comment cannot be empty.');
+    }
+
+    const newComment = await Comment.create({ comment, user, post, group });
+
+    res.redirect('/comments');
+  } catch (error) {
+    console.error(error);
+    res.send('Error posting comment.');
+  }
+});
+
+module.exports = router;
