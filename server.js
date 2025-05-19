@@ -4,6 +4,7 @@ const express = require('express')
 const app = express()
 const moment = require('moment')
 const path = require('path')
+const flash = require('express-flash');
 
 //Middleware section
 const mongoose = require('mongoose')
@@ -33,7 +34,7 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use('/uploads', express.static('uploads'));
 
-
+app.use(flash());
 
 app.use(
     session({
@@ -52,8 +53,23 @@ const groupController = require('./controllers/group')
 
 app.use("/auth", authentication);
 app.use("/posts", postCtrl);
-app.use("/home", isSignedIn, postCtrl);
-app.get('/profile', async (req, res) => {
+// Replace these lines:
+// app.use("/posts", postCtrl);
+// app.use("/home", isSignedIn, postCtrl);
+
+// With these:
+app.use("/posts", postCtrl); // Handles all /posts routes
+
+// Specific route for home page
+app.get("/home", isSignedIn, async (req, res) => {
+  try {
+    const posts = await Post.find({}).populate('user');
+    res.render("home/home.ejs", { posts });
+  } catch (error) {
+    console.error(error);
+    res.redirect('/');
+  }
+});app.get('/profile', async (req, res) => {
   res.render('profile/profile.ejs') 
 })
 
