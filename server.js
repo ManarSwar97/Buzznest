@@ -31,6 +31,8 @@ app.use(morgan('dev'))
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname, 'public')))
+app.use('/uploads', express.static('uploads'));
+
 
 
 app.use(
@@ -44,8 +46,8 @@ app.use(passUserToView)
 
 const authentication = require("./controllers/user")
 const postCtrl = require("./controllers/post")
-const groupController = require('./controllers/group');
-const gameController = require('./controllers/game');
+const groupController = require('./controllers/group')
+
 
 
 app.use("/auth", authentication);
@@ -54,23 +56,14 @@ app.use("/home", isSignedIn, postCtrl);
 app.get('/profile', async (req, res) => {
   res.render('profile/profile.ejs') 
 })
-app.get('/group/index', async (req, res) => {
-  res.render('group/index.ejs') 
-})
+
 app.get("/", (req, res) => {
   res.render("index.ejs");
 });
+app.use('/group', groupController);
 
-app.get('/games', gameController.listGames);
-app.get('/games/new', gameController.showGameForm);
-app.post('/games', gameController.createGame);
-app.get('/games/:id', gameController.showGame);
-app.delete('/games/:id', gameController.deleteGame);
 
-// Group routes (nested under games)
-app.get('/games/:gameId/groups/new', groupController.showGroupForm);
-app.post('/games/:gameId/groups', groupController.createGroup);
-app.delete('/games/:gameId/groups/:id', groupController.deleteGroup);
+
 
 
 app.listen(port, () => {
