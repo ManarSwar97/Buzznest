@@ -56,7 +56,7 @@ app.use("/posts", postCtrl);
 // Replace these lines:
 // app.use("/posts", postCtrl);
 // app.use("/home", isSignedIn, postCtrl);
-
+app.use("/group", groupController);
 // With these:
 app.use("/posts", postCtrl); // Handles all /posts routes
 

@@ -26,6 +26,15 @@
             margin-top: 10px;
             display: none;
         }
+        .username-link {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .username-link:hover {
+            color: #0d6efd;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -41,7 +50,7 @@
                 
                 <% if (groupSingle.user) { %>
                     <h5 class="card-subtitle mb-2 text-muted">
-                        Created by <%= groupSingle.user.username %>
+                        Created by <a href="/auth/profile/<%= groupSingle.user._id %>" class="username-link"><%= groupSingle.user.username %></a>
                     </h5>
                 <% } %>
                 
@@ -73,9 +82,11 @@
                         <div class="card-body">
                             <div class="post-header d-flex align-items-center mb-3">
                                 <% if (post.user && post.user.image) { %>
-                                    <img src="/profile/<%= post.user.image %>" class="rounded-circle me-3" width="50" height="50">
+                                    <img src="/auth/profile/<%= post.user.image %>" class="rounded-circle me-3" width="50" height="50">
                                 <% } %>
-                                <h5 class="mb-0">@<%= post.user.username %></h5>
+                                <h5 class="mb-0">
+                                    <a href="/auth/profile/<%= post.user._id %>" class="username-link">@<%= post.user.username %></a>
+                                </h5>
                             </div>
                             <h5 class="card-title"><%= post.postTitle %></h5>
                             <p class="card-text"><%= post.postText %></p>
@@ -164,14 +175,18 @@
 
         // Handle modal errors
         document.addEventListener('DOMContentLoaded', function() {
+            const hasError = <%= (typeof error !== 'undefined' && error) ? 'true' : 'false' %>;
+            const prevTitle = "<%= typeof body !== 'undefined' ? body.postTitle.replace(/"/g, '&quot;') : '' %>";
+            const prevText = "<%= typeof body !== 'undefined' ? body.postText.replace(/"/g, '&quot;') : '' %>";
+
             if (hasError) {
                 // Show modal if there's an error
                 const modal = new bootstrap.Modal(document.getElementById('createPostModal'));
                 modal.show();
-                
+
                 // Fill form with previous values
-                document.getElementById('postTitle').value = '<%= typeof body !== "undefined" ? body.postTitle : "" %>';
-                document.getElementById('postText').value = '<%= typeof body !== "undefined" ? body.postText : "" %>';
+                document.getElementById('postTitle').value = prevTitle;
+                document.getElementById('postText').value = prevText;
             }
         });
     </script>

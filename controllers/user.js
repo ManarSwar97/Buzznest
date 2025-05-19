@@ -96,28 +96,40 @@ router.get("/sign-out", (req, res) => {
 //and this https://javascript.info/try-catch
 //https://www.bennadel.com/blog/2154-i-finally-understand-the-finally-part-of-a-try-catch-control-statemen
 // //https://stackoverflow.com/questions/42013104/placement-of-catch-before-and-after-thent.htm
-
-
-router.get('/profile', (req, res) => {
-  if (!req.session.user) {
-    res.redirect('/sign-in')
-    return
+// Updated profile routes in auth.js
+// Route for viewing the current user's profile
+// Current user's profile
+router.get('/profile', async (req, res) => {
+  try {
+    const user = await User.findById(req.session.user._id);
+    if (!user) {
+      return res.status(404).render('errors/404');
+    }
+    res.render('profile/profile.ejs', { 
+      user,
+      isCurrentUser: true 
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).render('errors/500');
   }
+});
 
-  User.findById(req.session.user._id)
-    .then((user) => {
-      if (!user) {
-        res.redirect('/')
-        return
-      }
-  
-
-      res.render('profile/profile.ejs', { user })
-    })
-    .catch((error) => {
-      console.log(error)
-      res.send('Something went wrong!')
-    })
-})
+// Other users' profiles
+router.get('/profile/:userId',  async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    if (!user) {
+      return res.status(404).render('errors/404');
+    }
+    res.render('profile/profile.ejs', { 
+      user,
+      isCurrentUser: req.session.user._id === req.params.userId.toString()
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).render('errors/500');
+  }
+});
 
 module.exports = router
