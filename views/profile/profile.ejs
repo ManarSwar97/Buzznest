@@ -6,8 +6,11 @@
   <li>Name: <%= user.firstName %></li>
   <li>Last Name: <%= user.lastName %></li>
   <li>Email address: <%= user.email %></li>
-  <li><img src="/profile/<%= user.image %>" alt="User Image" /></li>
-</ul>
+<% if (user.image) { %>
+  <img src="/uploads/<%= user.image %>" alt="Profile Picture" width="150" />
 <% } else { %>
-<h1>User not Found, Sign in!</h1>
+  <img src="/uploads/default.jpg" alt="Profile Picture" width="150" />
 <% } %>
+<% } %>
+
+

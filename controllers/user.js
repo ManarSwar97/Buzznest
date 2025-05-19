@@ -1,58 +1,65 @@
-const express = require("express")
-const router = express.Router()
-const User = require("../models/user")
-const bcrypt = require("bcrypt")
-router.get("/sign-up", async(req, res)=>{
-    res.render("auth/sign-up.ejs")
-})
-router.post("/sign-up", async (req, res) => {
+const express = require("express");
+const router = express.Router();
+const User = require("../models/user");
+const bcrypt = require("bcrypt");
+const multer = require("multer");
+const path = require("path");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); 
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({ storage: storage }); 
+
+
+router.get("/sign-up", async (req, res) => {
+  res.render("auth/sign-up.ejs");
+});
+
+router.post("/sign-up", upload.single("image"), async (req, res) => {
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
     const username = req.body.username;
     const password = req.body.password;
     const confirmPassword = req.body.confirmPassword;
     const email = req.body.email;
-    const image = req.body.image;
 
-    const existingUsername = await User.findOne({ username });
-    const existingEmail = await User.findOne({ email });
+  const existingUsername = await User.findOne({ username });
+  const existingEmail = await User.findOne({ email });
 
-    if (existingUsername) {
-        return res.send("Username already taken.")
-    }
+  if (existingUsername) return res.send("Username already taken.");
+  if (existingEmail) return res.send("Email already registered.");
+  if (password !== confirmPassword) return res.send("Passwords do not match.");
 
-    if (existingEmail) {
-        return res.send("Email already registered.")
-    }
+  const hashedPass = bcrypt.hashSync(password, 12);
 
-    if (password !== confirmPassword) {
-        return res.send("Password and Confirm password are not the same.")
-    }
-    const hashedPass = bcrypt.hashSync(req.body.password, 12)
-    req.body.password = hashedPass
+  const newUser = await User.create({
+    firstName,
+    lastName,
+    email,
+    username,
+    password: hashedPass,
+    image: req.file ? req.file.filename : null, 
+  });
 
-    const newUser = await User.create({
-        firstName,
-        lastName,
-        email,
-        username,
-        password: req.body.password,
-        image,
+  req.session.user = {
+    firstName: newUser.firstName,
+    lastName: newUser.lastName,
+    email: newUser.email,
+    username: newUser.username,
+    image: newUser.image,
+    _id: newUser._id,
+  };
 
-    });
-
-    req.session.user = {
-        firstName: newUser.firstName,
-        lastName: newUser.lastName,
-        email: newUser.email,
-        username: newUser.username,
-        image: newUser.image,
-        _id: newUser._id,
-    }
-
-    req.session.save(() => {
-        res.redirect("/");
-    });
+  req.session.save(() => {
+    res.redirect("/");
+  });
 });
 
 router.get("/sign-in", async(req, res)=>{

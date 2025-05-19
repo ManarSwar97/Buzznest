@@ -1,57 +1,113 @@
-
-const express = require("express")
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
 const Group = require('../models/groups');
+const User = require('../models/user');
 const Game = require('../models/game');
+const multer = require("multer");
+const path = require("path");
 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); 
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+  },
+});
 
+const upload = multer({ storage: storage }); 
 
-router.index = async (req, res) => {
+// GET new group form
+router.get("/new", async (req, res) => {
     try {
-        const games = await Game.find().lean();
-        const gamesWithGroups = await Promise.all(games.map(async game => {
-            const groups = await Group.find({ game: game._id });
-            return { ...game, groups };
-        }));
-        res.render('group/index', { gamesWithGroups });
+        const group = await Game.find(); // Get all games for dropdown
+        res.render("group/new", { group });
     } catch (error) {
-        console.log(error);
-        res.redirect('/');
+        console.error(error);
+        res.redirect('/group');
     }
-};
+});
 
-router.showGroupForm = async (req, res) => {
-  try {
-    const game = await Game.findById(req.params.gameId);
-    res.render('group/new', { game });
-  } catch (error) {
-    console.log(error);
-    res.redirect(`/games/${req.params.gameId}`);
-  }
-};
+// POST create new group
+router.post("/", upload.single('groupImage'), async (req, res) => {
+    try {
+        const user = await User.findById(req.session.user._id);
+        const group = new Group({
+            groupName: req.body.groupName,
+            groupImage: req.file ? req.file.filename : 'group-default.jpg',
+            game: req.body.game,
+            user: user._id
+        });
+        await group.save();
+        res.redirect('/group');
+    } catch (error) {
+        console.error(error);
+        res.redirect('/group/new');
+    }
+});
 
-router.createGroup = async (req, res) => {
-  try {
-    const group = new Group({
-      groupName: req.body.groupName,
-      game: req.params.gameId
-    });
-    await group.save();
-    res.redirect(`/games/${req.params.gameId}`);
-  } catch (error) {
-    console.log(error);
-    res.redirect(`/games/${req.params.gameId}/groups/new`);
-  }
-};
+//// Add this route
+router.get('/groupHome', async (req, res) => {
+    try {
+       const groups = await Group.find({})
+   
+            .populate('user');
+        res.render('group/groupHome.ejs', { group: groups });
+    }  catch (error) {
+        console.error("Error rendering groupHome:", error);
+        // res.redirect('/groups'); // ← comment this for now
+        res.send("Error occurred: " + error.message);
+    }
+});
 
-router.deleteGroup = async (req, res) => {
-  try {
-    await Group.findByIdAndDelete(req.params.id);
-    res.redirect(`/games/${req.params.gameId}`);
-  } catch (error) {
-    console.log(error);
-    res.redirect(`/games/${req.params.gameId}`);
-  }
-};
+// Keep your existing '/' route
+
+router.get('/', async (req, res) => {
+    try {
+        const groups = await Group.find({})
+
+            .populate('user');
+        res.render('group/groupHome.ejs', { group: groups });
+    } catch (error) {
+        console.error("Error rendering groupHome:", error);
+        // res.redirect('/groups'); // ← comment this for now
+        res.send("Error occurred: " + error.message);
+    }
+});
+
+
+// GET single group - Fixed version
+router.get('/:groupId', async (req, res) => {
+    try {
+        const showGroup = await Group.findById(req.params.groupId)
+ 
+
+            .populate('user');
+            
+        if (!showGroup) {
+            return res.status(404).send('Group not found');
+        }
+        
+        res.render('group/show', {
+            groupSingle:showGroup
+        });
+    } catch (error) {
+        console.error("Error loading group:", error);
+        res.status(500).send("Error loading group: " + error.message);
+    }
+});
+
+// DELETE group
+router.delete('/:groupId', async (req, res) => {
+    try {
+        await Group.findByIdAndDelete(req.params.groupId);
+        res.redirect('/group');
+    }  catch (error) {
+        console.error("Error rendering groupHome:", error);
+        // res.redirect('/groups'); // ← comment this for now
+        res.send("Error occurred: " + error.message);
+    }
+});
 
 module.exports = router;

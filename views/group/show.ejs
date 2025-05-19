@@ -1,30 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title><%= group.groupName %> Details</title>
-    <style>
-        .group-details {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
-            border: 1px solid #eee;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= groupSingle.groupName %></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-        <%- include('../navbar/_navbar.ejs')%>
+    <%- include('../navbar/_navbar.ejs')%>
+    <div class="container mt-4">
+        <div class="card">
+            <% if (groupSingle.groupImage) { %>
+                <img src="/uploads/<%= groupSingle.groupImage %>" class="card-img-top" alt="<%= groupSingle.groupName %>">
+            <% } %>
+            
+            <div class="card-body">
+                <h2 class="card-title"><%= groupSingle.groupName %></h2>
+                
+                <% if (groupSingle.user) { %>
+                    <h5 class="card-subtitle mb-2 text-muted">
+                        Created by <%= groupSingle.user.username %>
+                    </h5>
+                <% } %>
+                
+                <% if (groupSingle.game) { %>
+                    <p class="card-text">
+                        Game: <%= groupSingle.game %>
+                    </p>
+                <% } %>
 
-    <div class="group-details">
-        <h1><%= group.groupName %></h1>
-        <p>Part of game: <a href="/games/<%= group.game._id %>"><%= group.game.gameName %></a></p>
-        
-        <div class="actions">
-            <form action="/games/<%= group.game._id %>/groups/<%= group._id %>?_method=DELETE" 
-                  method="POST">
-                <button type="submit">Delete Group</button>
-            </form>
-            <a href="/games/<%= group.game._id %>">← Back to Game</a>
+                
+                <form action="/group/<%= groupSingle._id %>?_method=DELETE" method="POST">
+                    <button type="submit" class="btn btn-danger">Delete Group</button>
+                    <a href="/group" class="btn btn-secondary">Back to Groups</a>
+                </form>
+            </div>
         </div>
     </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
