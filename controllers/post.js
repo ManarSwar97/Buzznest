@@ -22,22 +22,8 @@ const upload = multer({ storage: storage });
 
 router.get("/new", async (req, res) => {
   try {
-    // Get data from session if exists
-    const formData = req.session.formData || {};
-    
-    // Clear the session data after retrieving
-    if (req.session.formData) {
-      req.session.formData = null;
-    }
+    res.render("posts/new.ejs")
 
-    res.render("posts/new.ejs", {
-      groupId: req.query.groupId || null,
-      error: formData.error || null,
-      body: {
-        postTitle: formData.postTitle || '',
-        postText: formData.postText || ''
-      }
-    });
   } catch (error) {
     console.error(error);
     res.redirect('/');
@@ -46,23 +32,9 @@ router.get("/new", async (req, res) => {
 
 router.post("/", upload.single('postImage'), async (req, res) => {
   try {
-    console.log('Request body:', req.body); // Debug log
-    console.log('Uploaded file:', req.file); // Debug log
-
-    // Validate required fields
-    if (!req.body.postTitle) throw new Error('Post title is required');
-    if (!req.body.postText) throw new Error('Post content is required');
-    if (!req.file) throw new Error('Image upload failed');
-
-    // Verify user session
-    if (!req.session.user || !req.session.user._id) {
-      throw new Error('User not authenticated');
-    }
 
     const user = await User.findById(req.session.user._id);
-    if (!user) throw new Error('User not found');
 
-    // Prepare post data
     const postData = {
       postTitle: req.body.postTitle,
       postText: req.body.postText,
@@ -70,18 +42,11 @@ router.post("/", upload.single('postImage'), async (req, res) => {
       user: user._id
     };
 
-    // Add group reference if valid
-    if (req.body.groupId) {
-      if (!mongoose.Types.ObjectId.isValid(req.body.groupId)) {
-        throw new Error('Invalid group ID format');
-      }
-      postData.group = req.body.groupId;
-    }
+    postData.group = req.body.groupId;
 
     // Create and save post
     const post = new Post(postData);
     await post.save();
-    console.log('New post created:', post); // Debug log
 
     // Successful redirect
     return res.redirect(postData.group 
@@ -89,21 +54,9 @@ router.post("/", upload.single('postImage'), async (req, res) => {
       : '/home'
     );
 
-  } catch (error) {
-    console.error('POST CREATION ERROR:', error);
-    
-    // Store form data and error in session
-    req.session.formData = {
-      postTitle: req.body.postTitle,
-      postText: req.body.postText,
-      error: error.message
-    };
-    
-    const redirectUrl = req.body.groupId 
-      ? `/posts/new?groupId=${req.body.groupId}`
-      : '/posts/new';
-    
-    return res.redirect(redirectUrl);
+  }  catch (error) {
+    console.log(error);
+    res.redirect('/');
   }
 })
 
