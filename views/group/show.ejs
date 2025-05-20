@@ -98,7 +98,6 @@
                             <% if (post.userHasFavorited) { %>
                                 <p>You've favorited this listing!</p>
                                 <% } else { %>
-                                <p>You haven't favorited this listing.</p>
                                 <form action="/posts/<%= post._id %>/favorited-by/<%= post.user._id %>" method="POST">
                                 <button type="submit">Favorite it!</button>
                                 </form>
@@ -141,9 +140,9 @@
                                             <label for="editPostImage<%= post._id %>" class="form-label">Image</label>
                                             <input type="file" class="form-control" id="editPostImage<%= post._id %>" name="postImage" onchange="previewEditImage(this, '<%= post._id %>')">
                                             <% if (post.postImage) { %>
-                                                <img id="editImagePreview<%= post._id %>" src="/post/<%= post.postImage %>" class="img-thumbnail mt-2" alt="Current Post Image" style="max-width: 100%; max-height: 200px;">
+                                                <img id="/uploads/editImagePreview<%= post._id %>" src="/post/<%= post.postImage %>" class="img-thumbnail mt-2" alt="Current Post Image" style="max-width: 100%; max-height: 200px;">
                                             <% } else { %>
-                                                <img id="editImagePreview<%= post._id %>" class="img-thumbnail mt-2" alt="Image preview" style="max-width: 100%; max-height: 200px; display: none;">
+                                                <img id="/uploads/editImagePreview<%= post._id %>" class="img-thumbnail mt-2" alt="Image preview" style="max-width: 100%; max-height: 200px; display: none;">
                                             <% } %>
                                         </div>
                                     </div>

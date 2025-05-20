@@ -3,6 +3,7 @@ const router = express.Router()
 const mongoose = require('mongoose');
 const Post = require("../models/post")
 const User = require("../models/user");
+const group = require("../models/groups")
 const multer = require("multer");
 const path = require('path');
 
@@ -42,11 +43,6 @@ router.post("/", upload.single('postImage'), async (req, res) => {
 
     postData.group = req.body.groupId;
 
-    // Create and save post
-    const post = new Post(postData);
-    await post.save();
-
-
     // Successful redirect
     return res.redirect(postData.group
       ? `/group/${postData.group}`
@@ -77,16 +73,17 @@ router.get('/:postId', async (req, res)=>{
 
 router.get('/:postId/favorited-by/:userId', async (req, res) => {
   try {
-    const showPost = await Post.findById(req.params.postId).populate('user');
+    const showPost = await Post.findById(req.params.postId).populate('user').populate('group');
 
     const userHasFavorited = showPost.favoritedByUsers.some((user) =>
       user.equals(req.session.user._id)
     );
+    const groupSingle = showPost.group ? await Group.findById(showPost.group) : null;
 
     res.render('group/show.ejs', {
       posts: showPost,
       userHasFavorited: userHasFavorited,
-      currentUser: req.session.user
+      groupSingle: groupSingle
 
     });
 
@@ -124,36 +121,30 @@ router.delete('/:postId', async(req, res)=>{
 router.put('/:postId', upload.single('postImage'), async (req, res) => {
     try {
         const postId = req.params.postId;
-        const groupId = req.body.groupId || req.body.group; // Handle both cases
-
+        const groupId = req.body.groupId || req.body.group; 
         const existingPost = await Post.findById(postId);
-
-        
 
         let updateData = {
             postTitle: req.body.postTitle,
             postText: req.body.postText,
-            postImage : req.body.postImage || existingPost.postImage,
-            group: groupId // Use the groupId we extracted
+            group: groupId 
         };
-
-       
-
-
+        if (req.file) {
+            updateData.postImage = req.file.filename;
+        }
         const updatedPost = await Post.findByIdAndUpdate(
-            postId, 
-            updateData, 
+            postId,
+            updateData,
             { new: true, runValidators: true }
         );
 
-        
-
-        // Redirect to the group page if groupId exists, otherwise home
         res.redirect(groupId ? `/group/${groupId}` : '/home');
     } catch (error) {
         console.error('Error updating post:', error);
         res.status(500).send('Internal Server Error');
     }
+});
+
   module.exports = router;
 
 
