@@ -5,6 +5,7 @@ const Post = require("../models/post")
 const User = require("../models/user");
 const multer = require("multer");
 const path = require('path');
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/');
@@ -15,6 +16,7 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage: storage });
+
 router.get("/new", async (req, res) => {
   try {
     res.render("posts/new.ejs")
@@ -37,16 +39,26 @@ router.post("/", upload.single('postImage'), async (req, res) => {
     const post = new Post(postData);
     await post.save();
     console.log('New post created:', post); // Debug log
+
+    postData.group = req.body.groupId;
+
+    // Create and save post
+    const post = new Post(postData);
+    await post.save();
+
+
     // Successful redirect
     return res.redirect(postData.group
       ? `/group/${postData.group}`
       : '/home'
     );
+
   }  catch (error) {
     console.log(error);
     res.redirect('/');
   }
 })
+
 router.get('/:postId', async (req, res)=>{
     try{
         const showPost = await Post.findById(req.params.postId).populate('user')
@@ -59,6 +71,31 @@ router.get('/:postId', async (req, res)=>{
     res.redirect('/');
   }
 })
+
+
+
+
+router.get('/:postId/favorited-by/:userId', async (req, res) => {
+  try {
+    const showPost = await Post.findById(req.params.postId).populate('user');
+
+    const userHasFavorited = showPost.favoritedByUsers.some((user) =>
+      user.equals(req.session.user._id)
+    );
+
+    res.render('group/show.ejs', {
+      posts: showPost,
+      userHasFavorited: userHasFavorited,
+      currentUser: req.session.user
+
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.redirect('/');
+  }
+});
+
 router.delete('/:postId', async(req, res)=>{
     try{
         const deletePost = await Post.findById(req.params.postId)
@@ -117,8 +154,7 @@ router.put('/:postId', upload.single('postImage'), async (req, res) => {
         console.error('Error updating post:', error);
         res.status(500).send('Internal Server Error');
     }
-});
-module.exports = router;
+  module.exports = router;
 
 
 

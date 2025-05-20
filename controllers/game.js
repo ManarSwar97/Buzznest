@@ -43,7 +43,6 @@ router.showGame = async (req, res) => {
 router.deleteGame = async (req, res) => {
   try {
     await Game.findByIdAndDelete(req.params.id);
-    // Groups will remain but their game reference will be dangling
     res.redirect('/games');
   } catch (error) {
     console.log(error);
