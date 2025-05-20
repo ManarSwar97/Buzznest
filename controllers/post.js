@@ -43,9 +43,7 @@ router.post("/", upload.single('postImage'), async (req, res) => {
 
     postData.group = req.body.groupId;
 
-    // Create and save post
-    const post = new Post(postData);
-    await post.save();
+
 
 
     // Successful redirect
