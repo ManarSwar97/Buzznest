@@ -62,19 +62,26 @@ router.post("/", upload.single('postImage'), async (req, res) => {
 
 
 
-router.get('/:postId', async (req, res)=>{
-    try{
-        const showPost = await Post.findById(req.params.postId).populate('user')
-        res.render('posts/show.ejs', {
-            posts: showPost
-        })
+router.get('/:postId/favorited-by/:userId', async (req, res) => {
+  try {
+    const showPost = await Post.findById(req.params.postId).populate('user');
 
-    }
-    catch (error) {
+    const userHasFavorited = showPost.favoritedByUsers.some((user) =>
+      user.equals(req.session.user._id)
+    );
+
+    res.render('group/show.ejs', {
+      posts: showPost,
+      userHasFavorited: userHasFavorited,
+      currentUser: req.session.user
+
+    });
+
+  } catch (error) {
     console.log(error);
     res.redirect('/');
   }
-})
+});
 
 router.delete('/:postId', async(req, res)=>{
     try{
@@ -112,4 +119,17 @@ router.put('/:postId', async(req, res)=>{
     res.redirect('/');
   }
 })
+
+router.post('/:postId/favorited-by/:userId', async (req, res) => {
+  try {
+    await Post.findByIdAndUpdate(req.params.postId, {
+      $push: { favoritedByUsers: req.params.userId },
+    });
+    res.redirect(`/posts/${req.params.postId}/favorited-by/${req.params.userId}`);
+  } catch (error) {
+    console.log(error);
+    res.redirect('/');
+  }
+});
+
 module.exports = router;
