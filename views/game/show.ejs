@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= game.gameName %></title>
+</head>
+<body>
+      <%- include('../navbar/_navbar.ejs')%>
+
+  <h1><%= game.gameName %></h1>
+  
+  <h2>Groups in this Game:</h2>
+  <% groups.forEach(group => { %>
+    <div>
+      <h3><%= group.groupName %></h3>
+      <form action="/games/<%= game._id %>/groups/<%= group._id %>?_method=DELETE" method="POST">
+        <button type="submit">Delete Group</button>
+      </form>
+    </div>
+  <% }); %>
+
+  <a href="/games/<%= game._id %>/groups/new">Add New Group</a>
+  <a href="/games">Back to All Games</a>
+</body>
+</html>

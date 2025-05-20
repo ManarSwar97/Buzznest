@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create New Post</title>
+</head>
+<body>
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert-danger">
+      <%= error %>
+    </div>
+  <% } %>
+
+  <form action="/posts" method="POST" enctype="multipart/form-data">
+    <% if (typeof groupId !== 'undefined' && groupId) { %>
+      <input type="hidden" name="groupId" value="<%= groupId %>">
+    <% } %>
+    
+    <div class="form-group">
+      <label for="postTitle">Post Title</label>
+      <input type="text" name="postTitle" id="postTitle" required 
+             value="<%= typeof body !== 'undefined' ? body.postTitle : '' %>">
+    </div>
+
+    <div class="form-group">
+      <label for="postText">Description</label>
+      <textarea name="postText" id="postText" required>
+        <%= typeof body !== 'undefined' ? body.postText : '' %>
+      </textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="postImage">Image</label>
+      <input type="file" id="postImage" name="postImage" required>
+    </div>
+
+    <button type="submit">Create Post</button>
+  </form>
+</body>
+</html>

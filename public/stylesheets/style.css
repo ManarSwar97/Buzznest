@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: #9d99b1;
+}
+.recent-post h2 {
+  text-align: center;
+  color: #2d155a;
+  font-family: 'Playfair Display', serif;
+  font-size: 42px;
+  margin-bottom: 30px;
+}
+
+.new-post {
+  margin: 0 auto;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-bottom: 70px;
+  padding-bottom: 5%;
+}
+
+.post-card {
+  background-color: #f8f6ff;
+  padding: 20px;
+  border-radius: 15px;
+  border: 2px solid #ffffff; 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.post-header img {
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  border: 3px solid #fff;
+}
+
+.post-header h4 {
+  color: #2d155a;
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  margin: 0;
+}
+
+.post-card h2 {
+  font-size: 26px;
+  color: #2d155a;
+  font-family: 'Playfair Display', serif;
+  margin: 10px 0;
+}
+
+.post-card p {
+  font-size: 20px;
+  color: #333;
+  line-height: 1.5;
+}
+
+.post-card a {
+  display: flex;
+  margin-top: 10px;
+  color: #2d155a;
+  font-weight: bold;
+  justify-content: flex-end;
+}

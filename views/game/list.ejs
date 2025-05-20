@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>All Games</title>
+</head>
+<body>
+      <%- include('../navbar/_navbar.ejs')%>
+
+  <h1>All Games</h1>
+  <a href="/games/new">Create New Game</a>
+
+  <% games.forEach(game => { %>
+    <div>
+      <h2><%= game.gameName %></h2>
+      <a href="/games/<%= game._id %>">View Details</a>
+      <form action="/games/<%= game._id %>?_method=DELETE" method="POST">
+        <button type="submit">Delete Game</button>
+      </form>
+    </div>
+  <% }); %>
+</body>
+</html>

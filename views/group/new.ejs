@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Group to <%= group.game %></title>
+    <style>
+        form {
+            max-width: 500px;
+            margin: 20px auto;
+        }
+        label {
+            display: block;
+            margin: 10px 0;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+        <%- include('../navbar/_navbar.ejs')%>
+
+    <h1>Add Group to <%= group.game %></h1>
+    
+    <form action="/group/<%= group._id %>" method="POST" enctype="multipart/form-data">
+        <label>
+            Group Name:
+            <input type="text" name="groupName" required>
+        </label>
+         <label>
+            Group image:  
+        </label>
+            <input type="file" name="groupImage" required>
+      
+
+            <label>
+            to game
+            <input type="text" name="game" required>
+        </label>
+
+        <div class="form-actions">
+            <button type="submit">Create Group</button>
+            <a href="/group/ %>">Cancel</a>
+        </div>
+    </form>
+</body>
+</html>

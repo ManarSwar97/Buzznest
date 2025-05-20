@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Create New Game</title>
+</head>
+<body>
+      <%- include('../navbar/_navbar.ejs')%>
+
+  <h1>Create New Game</h1>
+  <form action="/games" method="POST">
+    <label>Game Name:
+      <input type="text" name="gameName" required>
+    </label>
+    <button type="submit">Create Game</button>
+  </form>
+  <a href="/games">Cancel</a>
+</body>
+</html>
