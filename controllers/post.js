@@ -5,124 +5,60 @@ const Post = require("../models/post")
 const User = require("../models/user");
 const multer = require("multer");
 const path = require('path');
-
-
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/'); 
+    cb(null, 'uploads/');
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
     cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
   },
 });
-
-const upload = multer({ storage: storage }); 
-
-
+const upload = multer({ storage: storage });
 router.get("/new", async (req, res) => {
   try {
-    // Get data from session if exists
-    const formData = req.session.formData || {};
-    
-    // Clear the session data after retrieving
-    if (req.session.formData) {
-      req.session.formData = null;
-    }
-
-    res.render("posts/new.ejs", {
-      groupId: req.query.groupId || null,
-      error: formData.error || null,
-      body: {
-        postTitle: formData.postTitle || '',
-        postText: formData.postText || ''
-      }
-    });
+    res.render("posts/new.ejs")
   } catch (error) {
     console.error(error);
     res.redirect('/');
   }
 });
-
 router.post("/", upload.single('postImage'), async (req, res) => {
   try {
-    console.log('Request body:', req.body); // Debug log
-    console.log('Uploaded file:', req.file); // Debug log
-
-    // Validate required fields
-    if (!req.body.postTitle) throw new Error('Post title is required');
-    if (!req.body.postText) throw new Error('Post content is required');
-    if (!req.file) throw new Error('Image upload failed');
-
-    // Verify user session
-    if (!req.session.user || !req.session.user._id) {
-      throw new Error('User not authenticated');
-    }
-
     const user = await User.findById(req.session.user._id);
-    if (!user) throw new Error('User not found');
-
-    // Prepare post data
     const postData = {
       postTitle: req.body.postTitle,
       postText: req.body.postText,
       postImage: req.file.filename,
       user: user._id
     };
-
-    // Add group reference if valid
-    if (req.body.groupId) {
-      if (!mongoose.Types.ObjectId.isValid(req.body.groupId)) {
-        throw new Error('Invalid group ID format');
-      }
-      postData.group = req.body.groupId;
-    }
-
+    postData.group = req.body.groupId;
     // Create and save post
     const post = new Post(postData);
     await post.save();
     console.log('New post created:', post); // Debug log
-
     // Successful redirect
-    return res.redirect(postData.group 
+    return res.redirect(postData.group
       ? `/group/${postData.group}`
       : '/home'
     );
-
-  } catch (error) {
-    console.error('POST CREATION ERROR:', error);
-    
-    // Store form data and error in session
-    req.session.formData = {
-      postTitle: req.body.postTitle,
-      postText: req.body.postText,
-      error: error.message
-    };
-    
-    const redirectUrl = req.body.groupId 
-      ? `/posts/new?groupId=${req.body.groupId}`
-      : '/posts/new';
-    
-    return res.redirect(redirectUrl);
+  }  catch (error) {
+    console.log(error);
+    res.redirect('/');
   }
 })
-
-
-
 router.get('/:postId', async (req, res)=>{
     try{
         const showPost = await Post.findById(req.params.postId).populate('user')
         res.render('posts/show.ejs', {
             posts: showPost
         })
-
     }
     catch (error) {
     console.log(error);
     res.redirect('/');
   }
 })
-
 router.delete('/:postId', async(req, res)=>{
     try{
         const deletePost = await Post.findById(req.params.postId)
@@ -135,28 +71,61 @@ router.delete('/:postId', async(req, res)=>{
   }
 })
 
-router.get('/:postId/edit', async(req, res)=>{
-    try{
-        const editPost = await Post.findById(req.params.postId)
-        res.render('posts/edit.ejs', {
-            posts: editPost
-        })
-    }
-    catch (error) {
-    console.log(error);
-    res.redirect('/');
-  }
-})
-router.put('/:postId', async(req, res)=>{
-    try{
-        const updatePost = await Post.findById(req.params.postId)
-        await updatePost.updateOne(req.body);
-        res.redirect(`/posts/${req.params.postId}`);
+// router.get('/:postId/edit', async(req, res)=>{
+//     try{
+//         const editPost = await Post.findById(req.params.postId)
+//         res.render('posts/edit.ejs', {
+//             posts: editPost
+//         })
+//     }
+//     catch (error) {
+//     console.log(error);
+//     res.redirect('/');
+//   }
+// })
 
+router.put('/:postId', upload.single('postImage'), async (req, res) => {
+    try {
+        const postId = req.params.postId;
+        const groupId = req.body.groupId || req.body.group; // Handle both cases
+
+        const existingPost = await Post.findById(postId);
+
+        if (!existingPost) {
+            return res.status(404).send('Post not found');
+        }
+
+        let updateData = {
+            postTitle: req.body.postTitle,
+            postText: req.body.postText,
+            group: groupId // Use the groupId we extracted
+        };
+
+        // Handle image upload
+        if (req.file) {
+            updateData.postImage = req.file.filename;
+        }
+
+        const updatedPost = await Post.findByIdAndUpdate(
+            postId, 
+            updateData, 
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedPost) {
+            return res.status(500).send('Failed to update post');
+        }
+
+        // Redirect to the group page if groupId exists, otherwise home
+        res.redirect(groupId ? `/group/${groupId}` : '/home');
+    } catch (error) {
+        console.error('Error updating post:', error);
+        res.status(500).send('Internal Server Error');
     }
-    catch (error) {
-    console.log(error);
-    res.redirect('/');
-  }
-})
+});
 module.exports = router;
+
+
+
+
+

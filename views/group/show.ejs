@@ -44,16 +44,16 @@
             <% if (groupSingle.groupImage) { %>
                 <img src="/uploads/<%= groupSingle.groupImage %>" class="card-img-top" alt="<%= groupSingle.groupName %>">
             <% } %>
-            
+
             <div class="card-body">
                 <h2 class="card-title"><%= groupSingle.groupName %></h2>
-                
+
                 <% if (groupSingle.user) { %>
                     <h5 class="card-subtitle mb-2 text-muted">
                         Created by <a href="/auth/profile/<%= groupSingle.user._id %>" class="username-link"><%= groupSingle.user.username %></a>
                     </h5>
                 <% } %>
-                
+
                 <% if (groupSingle.game) { %>
                     <p class="card-text">
                         Game: <%= groupSingle.game %>
@@ -67,15 +67,13 @@
             </div>
         </div>
 
-        <!-- Create Post Button triggering modal -->
         <button type="button" class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#createPostModal">
             Create New Post
         </button>
 
-        <!-- Posts display section -->
         <div class="container mt-4">
             <h3>Group Posts</h3>
-            
+
             <% if (posts && posts.length > 0) { %>
                 <% posts.forEach(post => { %>
                     <div class="card mb-3">
@@ -97,7 +95,49 @@
                                 <form action="/posts/<%= post._id %>?_method=DELETE" method="POST" class="d-inline">
                                     <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                 </form>
-                                <a href="/posts/<%= post._id %>/edit" class="btn btn-secondary btn-sm ms-2">Edit</a>
+                                <button type="button" class="btn btn-secondary btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#editPostModal<%= post._id %>">
+                                    Edit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="editPostModal<%= post._id %>" tabindex="-1" aria-labelledby="editPostModalLabel<%= post._id %>" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editPostModalLabel<%= post._id %>">Edit Post</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="/posts/<%= post._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+                                    <div class="modal-body">
+                                        <input type="hidden" name="groupId" value="<%= groupSingle._id %>">
+
+                                        <div class="form-group mb-3">
+                                            <label for="editPostTitle<%= post._id %>" class="form-label">Post Title</label>
+                                            <input type="text" class="form-control" id="editPostTitle<%= post._id %>" name="postTitle" value="<%= post.postTitle %>" required>
+                                        </div>
+
+                                        <div class="form-group mb-3">
+                                            <label for="editPostText<%= post._id %>" class="form-label">Description</label>
+                                            <textarea class="form-control" id="editPostText<%= post._id %>" name="postText" rows="5" required><%= post.postText %></textarea>
+                                        </div>
+
+                                        <div class="form-group mb-3">
+                                            <label for="editPostImage<%= post._id %>" class="form-label">Image</label>
+                                            <input type="file" class="form-control" id="editPostImage<%= post._id %>" name="postImage" onchange="previewEditImage(this, '<%= post._id %>')">
+                                            <% if (post.postImage) { %>
+                                                <img id="editImagePreview<%= post._id %>" src="/post/<%= post.postImage %>" class="img-thumbnail mt-2" alt="Current Post Image" style="max-width: 100%; max-height: 200px;">
+                                            <% } else { %>
+                                                <img id="editImagePreview<%= post._id %>" class="img-thumbnail mt-2" alt="Image preview" style="max-width: 100%; max-height: 200px; display: none;">
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -108,7 +148,6 @@
         </div>
     </div>
 
-    <!-- Create Post Modal -->
     <div class="modal fade" id="createPostModal" tabindex="-1" aria-labelledby="createPostModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -119,13 +158,13 @@
                 <form action="/posts" method="POST" enctype="multipart/form-data">
                     <div class="modal-body">
                         <input type="hidden" name="groupId" value="<%= groupSingle._id %>">
-                        
+
                         <% if (typeof error !== 'undefined' && error) { %>
                             <div class="alert alert-danger">
                                 <%= error %>
                             </div>
                         <% } %>
-                        
+
                         <div class="form-group mb-3">
                             <label for="postTitle" class="form-label">Post Title</label>
                             <input type="text" class="form-control" id="postTitle" name="postTitle" required>
@@ -138,9 +177,9 @@
 
                         <div class="form-group mb-3">
                             <label for="postImage" class="form-label">Image</label>
-                            <input type="file" class="form-control" id="postImage" name="postImage" required
+                            <input type="file" class="form-control" id="postImage" name="postImage"
                                    onchange="previewImage(this)">
-                            <img id="imagePreview" class="img-thumbnail" alt="Image preview">
+                            <img id="imagePreview" class="img-thumbnail" alt="Image preview" style="max-width: 100%; max-height: 200px; display: none;">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -154,39 +193,66 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Image preview functionality
+        // Image preview functionality for create modal
         function previewImage(input) {
             const preview = document.getElementById('imagePreview');
             const file = input.files[0];
-            
+
             if (file) {
                 const reader = new FileReader();
-                
+
                 reader.onload = function(e) {
                     preview.src = e.target.result;
                     preview.style.display = 'block';
                 }
-                
+
                 reader.readAsDataURL(file);
             } else {
                 preview.style.display = 'none';
             }
         }
 
-        // Handle modal errors
+        // Image preview functionality for edit modal
+        function previewEditImage(input, postId) {
+            const preview = document.getElementById(`editImagePreview${postId}`);
+            const file = input.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+
+                reader.readAsDataURL(file);
+            } else {
+                // If no new file is selected, keep the existing image visible (if any)
+                const existingImageSrc = preview.getAttribute('src');
+                if (!existingImageSrc || existingImageSrc === '/post/undefined') {
+                    preview.style.display = 'none';
+                } else {
+                    preview.style.display = 'block'; // Ensure existing image remains if no new one is chosen
+                }
+            }
+        }
+
+        // Handle modal errors and pre-fill form (for create modal)
         document.addEventListener('DOMContentLoaded', function() {
             const hasError = <%= (typeof error !== 'undefined' && error) ? 'true' : 'false' %>;
-            const prevTitle = "<%= typeof body !== 'undefined' ? body.postTitle.replace(/"/g, '&quot;') : '' %>";
-            const prevText = "<%= typeof body !== 'undefined' ? body.postText.replace(/"/g, '&quot;') : '' %>";
+            const prevTitle = "<%= (typeof body !== 'undefined' && body.postTitle) ? body.postTitle.replace(/"/g, '\\"') : '' %>";
+            const prevText = "<%= (typeof body !== 'undefined' && body.postText) ? body.postText.replace(/"/g, '\\"') : '' %>";
 
             if (hasError) {
-                // Show modal if there's an error
-                const modal = new bootstrap.Modal(document.getElementById('createPostModal'));
-                modal.show();
-
-                // Fill form with previous values
-                document.getElementById('postTitle').value = prevTitle;
-                document.getElementById('postText').value = prevText;
+                const modalElement = document.getElementById('createPostModal');
+                if (modalElement) {
+                    const modal = new bootstrap.Modal(modalElement);
+                    modal.show();
+                    const postTitleInput = document.getElementById('postTitle');
+                    const postTextInput = document.getElementById('postText');
+                    if (postTitleInput) postTitleInput.value = prevTitle;
+                    if (postTextInput) postTextInput.value = prevText;
+                }
             }
         });
     </script>
