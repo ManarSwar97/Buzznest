@@ -43,6 +43,11 @@ router.post("/", upload.single('postImage'), async (req, res) => {
 
     postData.group = req.body.groupId;
 
+    // Create and save post
+    const post = new Post(postData);
+    await post.save();
+
+
     // Successful redirect
     return res.redirect(postData.group
       ? `/group/${postData.group}`
@@ -146,19 +151,6 @@ router.put('/:postId', upload.single('postImage'), async (req, res) => {
         console.error('Error updating post:', error);
         res.status(500).send('Internal Server Error');
     }
-});
-
-
-router.post('/:postId/favorited-by/:userId', async (req, res) => {
-  try {
-    await Post.findByIdAndUpdate(req.params.postId, {
-      $addToSet: { favoritedByUsers: req.params.userId } // avoids duplicates
-    });
-    res.redirect(`/posts/${req.params.postId}`);
-  } catch (error) {
-    console.log(error);
-    res.redirect('/');
-  }
 });
 
   module.exports = router;
