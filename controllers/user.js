@@ -96,6 +96,28 @@ router.get("/sign-out", (req, res) => {
 //and this https://javascript.info/try-catch
 //https://www.bennadel.com/blog/2154-i-finally-understand-the-finally-part-of-a-try-catch-control-statemen
 // //https://stackoverflow.com/questions/42013104/placement-of-catch-before-and-after-thent.htm
+
+
+router.get('/profile', (req, res) => {
+  if (!req.session.user) {
+    res.redirect('/sign-in')
+    return
+  }
+
+  User.findById(req.session.user._id)
+    .then((user) => {
+      if (!user) {
+        res.redirect('/')
+        return
+      }
+
+      res.render('profile/profile.ejs', { user })
+    })
+    .catch((error) => {
+      console.log(error)
+      res.send('Something went wrong!')
+    })
+})
 // Updated profile routes in auth.js
 // Route for viewing the current user's profile
 // Current user's profile
@@ -131,5 +153,8 @@ router.get('/profile/:userId',  async (req, res) => {
     res.status(500).render('errors/500');
   }
 });
+
+//comment
+
 
 module.exports = router

@@ -81,22 +81,19 @@ router.get('/', async (req, res) => {
 // GET single group - Fixed version
 // GET single group - Fixed version
 router.get('/:groupId', async (req, res) => {
-    try {
-        const showGroup = await Group.findById(req.params.groupId).populate('user');
-        const groupPosts = await Post.find({ group: req.params.groupId }).populate('user');
-            
-        if (!showGroup) {
-            return res.status(404).send('Group not found');
-        }
-        
-        res.render('group/show', {
-            groupSingle: showGroup,
-            posts: groupPosts  
-        });
-    } catch (error) {
-        console.error("Error loading group:", error);
-        res.status(500).send("Error loading group: " + error.message);
-    }
+  try {
+    const showGroup = await Group.findById(req.params.groupId).populate('user');
+    const groupPosts = await Post.find({ group: req.params.groupId }).populate('user');
+    
+    res.render('group/show', {
+      groupSingle: showGroup,
+      posts: groupPosts,
+      currentUser: req.session.user // Make sure this is included
+    });
+  } catch (error) {
+    console.error(error);
+    res.redirect('/group');
+  }
 });
 
 // DELETE group

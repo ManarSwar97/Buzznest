@@ -1,0 +1,16 @@
+<h1>Leave a Comment</h1>
+    <form action="/comments" method="POST">
+        <input type="text" name="user" placeholder="User ID">
+        <input type="text" name="post" placeholder="Post ID">
+        <input type="text" name="group" placeholder="Group ID">
+        <!-- took a reference from  -->
+        <textarea name="comment" placeholder="Enter your comment"></textarea>
+        <button type="submit">Submit</button>
+    </form>
+    
+    <h2>Comments:</h2>
+    <ul>
+        <% comments.forEach(comment => { %>
+            <li><%= comment.comment %> (by <%= comment.user.username %>)</li>
+        <% }) %>
+    </ul>

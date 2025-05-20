@@ -81,7 +81,20 @@ app.use('/group', groupController);
 
 
 
+//comment
+app.get('/comments', async (req, res) => {
+  res.render('comment/comment.ejs');
+});
+
+
+
+
+
+//just a small note
+
+
 
 app.listen(port, () => {
   console.log(`The express app is ready on port ${port}!`);
 });
+
