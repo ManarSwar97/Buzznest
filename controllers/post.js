@@ -91,20 +91,17 @@ router.put('/:postId', upload.single('postImage'), async (req, res) => {
 
         const existingPost = await Post.findById(postId);
 
-        if (!existingPost) {
-            return res.status(404).send('Post not found');
-        }
+        
 
         let updateData = {
             postTitle: req.body.postTitle,
             postText: req.body.postText,
+            postImage : req.body.postImage || existingPost.postImage,
             group: groupId // Use the groupId we extracted
         };
 
-        // Handle image upload
-        if (req.file) {
-            updateData.postImage = req.file.filename;
-        }
+       
+
 
         const updatedPost = await Post.findByIdAndUpdate(
             postId, 
@@ -112,9 +109,7 @@ router.put('/:postId', upload.single('postImage'), async (req, res) => {
             { new: true, runValidators: true }
         );
 
-        if (!updatedPost) {
-            return res.status(500).send('Failed to update post');
-        }
+        
 
         // Redirect to the group page if groupId exists, otherwise home
         res.redirect(groupId ? `/group/${groupId}` : '/home');
