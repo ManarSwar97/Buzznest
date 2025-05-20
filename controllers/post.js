@@ -43,7 +43,6 @@ router.post("/", upload.single('postImage'), async (req, res) => {
     postData.group = req.body.groupId;
 
     // Create and save post
-    const post = new Post(postData);
     await post.save();
 
 
@@ -152,8 +151,10 @@ router.put('/:postId', upload.single('postImage'), async (req, res) => {
         res.redirect(groupId ? `/group/${groupId}` : '/home');
     } catch (error) {
         console.error('Error updating post:', error);
-        res.status(500).send('Internal Server Error');
-    }
+          res.status(500).send('Internal Server Error');
+      }
+  });
+  
   module.exports = router;
 
 
