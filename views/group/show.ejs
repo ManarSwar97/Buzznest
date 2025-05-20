@@ -95,13 +95,16 @@
 
                                 <p>Favorited by <%= post.favoritedByUsers.length %> people.</p>
 
-                            <% if (post.userHasFavorited) { %>
+                            <% if (userHasFavorited) { %>
                                 <p>You've favorited this listing!</p>
                                 <% } else { %>
-                                <form action="/posts/<%= post._id %>/favorited-by/<%= post.user._id %>" method="POST">
-                                <button type="submit">Favorite it!</button>
-                                </form>
-
+                                <% if (post.user) { %>
+                                    <form action="/<%= post._id %>/favorited-by/<%= post.user._id %>" method="POST">
+                                    <button type="submit">Favorite it!</button>
+                                    </form>
+                                <% } else { %>
+                                    <p>Cannot favorite: user not found.</p>
+                                <% } %>
                                 <% } %>
                             </div>
                             <div class="mt-3">

@@ -71,27 +71,24 @@ router.get('/:postId', async (req, res)=>{
 
 
 
-router.get('/:postId/favorited-by/:userId', async (req, res) => {
+router.get('/:postId', async (req, res)=> {
   try {
-    const showPost = await Post.findById(req.params.postId).populate('user').populate('group');
+    const showPost = await Post.findById(req.params.postId).populate('user');
 
-    const userHasFavorited = showPost.favoritedByUsers.some((user) =>
+    const userHasFavorited = showPost.favoritedByUsers.some(user =>
       user.equals(req.session.user._id)
     );
-    const groupSingle = showPost.group ? await Group.findById(showPost.group) : null;
 
-    res.render('group/show.ejs', {
+    res.render('posts/show.ejs', {
       posts: showPost,
-      userHasFavorited: userHasFavorited,
-      groupSingle: groupSingle
-
+      userHasFavorited: userHasFavorited
     });
-
   } catch (error) {
     console.log(error);
     res.redirect('/');
   }
 });
+
 
 router.delete('/:postId', async(req, res)=>{
     try{
@@ -121,14 +118,17 @@ router.delete('/:postId', async(req, res)=>{
 router.put('/:postId', upload.single('postImage'), async (req, res) => {
     try {
         const postId = req.params.postId;
-        const groupId = req.body.groupId || req.body.group; 
+        const groupId = req.body.groupId || req.body.group; // Handle both cases
         const existingPost = await Post.findById(postId);
-
+        if (!existingPost) {
+            return res.status(404).send('Post not found');
+        }
         let updateData = {
             postTitle: req.body.postTitle,
             postText: req.body.postText,
-            group: groupId 
+            group: groupId // Use the groupId we extracted
         };
+        // Handle image upload
         if (req.file) {
             updateData.postImage = req.file.filename;
         }
@@ -137,12 +137,28 @@ router.put('/:postId', upload.single('postImage'), async (req, res) => {
             updateData,
             { new: true, runValidators: true }
         );
-
+        if (!updatedPost) {
+            return res.status(500).send('Failed to update post');
+        }
+        // Redirect to the group page if groupId exists, otherwise home
         res.redirect(groupId ? `/group/${groupId}` : '/home');
     } catch (error) {
         console.error('Error updating post:', error);
         res.status(500).send('Internal Server Error');
     }
+});
+
+
+router.post('/:postId/favorited-by/:userId', async (req, res) => {
+  try {
+    await Post.findByIdAndUpdate(req.params.postId, {
+      $addToSet: { favoritedByUsers: req.params.userId } // avoids duplicates
+    });
+    res.redirect(`/posts/${req.params.postId}`);
+  } catch (error) {
+    console.log(error);
+    res.redirect('/');
+  }
 });
 
   module.exports = router;
