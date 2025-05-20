@@ -3,6 +3,7 @@ const router = express.Router();
 const Group = require('../models/groups');
 const User = require('../models/user');
 const Game = require('../models/game');
+const Post = require('../models/post');
 const multer = require("multer");
 const path = require("path");
 
@@ -78,19 +79,19 @@ router.get('/', async (req, res) => {
 
 
 // GET single group - Fixed version
+// GET single group - Fixed version
 router.get('/:groupId', async (req, res) => {
     try {
-        const showGroup = await Group.findById(req.params.groupId)
- 
-
-            .populate('user');
+        const showGroup = await Group.findById(req.params.groupId).populate('user');
+        const groupPosts = await Post.find({ group: req.params.groupId }).populate('user');
             
         if (!showGroup) {
             return res.status(404).send('Group not found');
         }
         
         res.render('group/show', {
-            groupSingle:showGroup
+            groupSingle: showGroup,
+            posts: groupPosts  
         });
     } catch (error) {
         console.error("Error loading group:", error);
@@ -109,5 +110,8 @@ router.delete('/:groupId', async (req, res) => {
         res.send("Error occurred: " + error.message);
     }
 });
+
+
+
 
 module.exports = router;
