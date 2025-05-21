@@ -144,9 +144,9 @@ router.get('/profile/:userId',  async (req, res) => {
     if (!user) {
       return res.status(404).render('errors/404');
     }
-    res.render('profile/profile.ejs', { 
+    res.render('profile/profile2.ejs', { 
       user,
-      isCurrentUser: req.session.user._id === req.params.userId.toString()
+      isCurrentUser: req.params.userId.toString()
     });
   } catch (error) {
     console.error(error);
@@ -156,7 +156,10 @@ router.get('/profile/:userId',  async (req, res) => {
 router.get('/:userId', async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
-    res.render('profile/profile.ejs', { user });
+    res.render('profile/profile.ejs', { 
+      user,
+      users: req.params.userId.toString(),
+        });
   } catch (error) {
     console.log(error);
     res.redirect('/');
