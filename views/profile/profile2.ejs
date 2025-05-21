@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= user.username %>'s Profile</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: 'Playfair Display', serif;
+      color: #807b9b;
+      background: #B993D6;  /* fallback for old browsers */
+      background: -webkit-linear-gradient(to top, #8CA6DB, #B993D6);  /* Chrome 10-25, Safari 5.1-6 */
+      background: linear-gradient(to top, #8CA6DB, #B993D6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    .profile{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 0 ;
+
+    }
+    .profile-container {
+      display: flex;
+      flex-direction: column;
+      background-color: white;
+      padding: 60px;
+      border-radius: 10%;
+      border: 5px solid white;
+      max-width: 600px;
+      width: 90%;
+      box-sizing: border-box;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+
+    .profile-header {
+      font-size: 35px;
+      font-weight: 700;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .profile-image {
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      margin-bottom: 30px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      border: 3px solid #807b9b;
+    }
+
+    ul.user-info {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.6;
+    }
+
+    ul.user-info li {
+      padding: 10px 0;
+      border-bottom: 1px solid #e6e5ec;
+    }
+
+    ul.user-info li:last-child {
+      border-bottom: none;
+    }
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
+}
+
+button {
+    width: 150px;  
+    height: 45px;
+    background-color: #807b9b;
+    color: white;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+  </style>
+</head>
+<body>
+  <%- include('../navbar/_navbar.ejs') %>
+
+  <div class="profile">
+  <div class="profile-container">
+    <h3 class="profile-header"><%= user.username %>'s Profile</h3>
+
+    <% if (user.image) { %>
+      <img src="/uploads/<%= user.image %>" alt="Profile Image" class="profile-image" />
+    <% } else { %>
+      <img src="/uploads/default.jpg" alt="Default Profile Image" class="profile-image" />
+    <% } %>
+
+    <ul class="user-info">
+      <li>First Name: <%= user.firstName %> </li>
+      <li>Last Name: <%= user.lastName %></li>
+      <li>Username: <%= user.username %></li>
+      <li>Email: <%= user.email %></li>
+      <li>Member since: <%= user.createdAt.toLocaleDateString() %></li>
+    </ul>
+  </div>
+</div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

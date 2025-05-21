@@ -136,7 +136,8 @@ router.post('/:postId', async (req, res) => {
 
     res.render('group/show.ejs', {
       posts: post,
-      userHasFavorited: index
+      userHasFavorited: index,
+      sessionUserId: req.session.user._id.toString()
     });
   } catch (error) {
     console.error('Error updating favorites:', error);
