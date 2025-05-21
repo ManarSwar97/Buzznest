@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Post</title>
+    <link rel="stylesheet" href="/stylesheets/style6.css" />
+
+</head>
+<body>
+    <%- include('../navbar/_navbar.ejs')%>
+    <div class="new-form">
+        <div class="form">
+    <h3>Edit the Profile</h3>
+    <form action="/profile/<%= profile._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+        <label for="firstName">First Name: </label>
+        <input type="text" name="firstName" id="firstName" value="<%= profile.firstName %>">
+        <br>
+        </div>
+        <div class="form-group">
+        <label for="lastName">Last Name: </label>
+        <input type="text" name="lastName" id="lastName" value="<%= profile.lastName %>">
+        <br>
+        </div>
+        <div class="form-group">
+        <label for="username">Username: </label>
+        <input type="text" name="username" id="username" value="<%= profile.username %>">
+        <br>
+        </div>
+        <div class="form-group">
+        <label for="email">Email: </label>
+        <input type="text" id="email" name="email" value="<%= profile.email %>"/>
+        <br>
+        </div>
+        <div class="form-group">
+        <label for="image">Profile Image: </label>
+        <input type="file" id="image" name="image" value="<%= profile.image %>"/>
+        <br>
+        <div class="button-container">
+        <button type="submit">Save</button>
+        </div>
+    </form>
+    </div>
+</div>
+
+</body>
+</html>

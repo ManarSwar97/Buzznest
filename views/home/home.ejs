@@ -19,12 +19,12 @@
         <% posts.forEach((post) => { %>
         <div class="post-card">
             <div class="post-header">
-                <img src="/profile/<%= post.user.image %>" alt="User Image">
+                <img src="/uploads/<%= post.user.image %>" alt="User Image">
                 <h4>@<%= post.user.username %></h4>
             </div>
             <h2><%= post.postTitle %></h2>
             <p><%= post.postText %></p>
-            <a href="/posts/<%= post._id %>">View more details</a>
+            <a href="/uploads/<%= post._id %>">View more details</a>
         </div>
         <% }) %>
     </div>

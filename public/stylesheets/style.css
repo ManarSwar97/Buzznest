@@ -3,12 +3,21 @@
 
 body {
   margin: 0;
+  height: 100vh;
   font-family: 'Roboto', sans-serif;
-  background-color: #9d99b1;
+  background: #B993D6;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to top, #8CA6DB, #B993D6);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to top, #8CA6DB, #B993D6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: #807b9b;
+
 }
+
 .recent-post h2 {
   text-align: center;
-  color: #2d155a;
+  color: white;
   font-family: 'Playfair Display', serif;
   font-size: 42px;
   margin-bottom: 30px;
@@ -47,7 +56,6 @@ body {
 }
 
 .post-header h4 {
-  color: #2d155a;
   font-family: 'Playfair Display', serif;
   font-size: 22px;
   margin: 0;
@@ -55,7 +63,6 @@ body {
 
 .post-card h2 {
   font-size: 26px;
-  color: #2d155a;
   font-family: 'Playfair Display', serif;
   margin: 10px 0;
 }
@@ -69,7 +76,9 @@ body {
 .post-card a {
   display: flex;
   margin-top: 10px;
-  color: #2d155a;
   font-weight: bold;
   justify-content: flex-end;
+}
+.post-card h2{
+  color: #807b9b;
 }
