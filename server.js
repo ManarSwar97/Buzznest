@@ -26,14 +26,14 @@ const Post = require('./models/post');
 const User = require('./models/user')
 
 //Using Malware
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 app.use(morgan('dev'))
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use('/uploads', express.static('uploads'));
-
+app.use(express.json());
 app.use(flash());
 
 app.use(

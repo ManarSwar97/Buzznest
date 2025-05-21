@@ -60,7 +60,7 @@ router.post("/", upload.single('postImage'), async (req, res) => {
 
 router.get('/:postId', async (req, res)=>{
     try{
-        const showPost = await Post.findById(req.params.postId).populate('user').populate('likes.users', 'username');
+        const showPost = await Post.findById(req.params.postId).populate('user').populate('likes.users', 'username','comments.user');
         res.render('posts/show.ejs', {
             posts: showPost
         })
@@ -127,7 +127,7 @@ router.post('/:postId', async (req, res) => {
   const post = await Post.findById(req.params.postId)
   .populate('user')
   .populate('group')
-  .populate('likes.users', 'username');
+  .populate('likes.users', 'username','comments.user');
 
     // Check if user already favorited the post
     const index = post.favoritedByUsers.findIndex((user) =>
@@ -208,6 +208,96 @@ router.put('/:postId', upload.single('postImage'), async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
+
+// Add a comment to a post
+// Add a comment to a post
+router.post('/:postId/comments', async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.postId);
+    const text = req.body.text; // Changed from destructuring
+    
+    if (!text) {
+      return res.status(400).json({ error: 'Comment text is required' });
+    }
+
+    const newComment = {
+      text,
+      user: req.session.user._id
+    };
+
+    post.comments.push(newComment);
+    await post.save();
+
+    // Populate the user data for the new comment
+    const populatedPost = await Post.findById(post._id)
+      .populate('comments.user', 'username image');
+
+    // Return the last comment (the one we just added)
+    const addedComment = populatedPost.comments[populatedPost.comments.length - 1];
+    
+    res.json({ 
+      success: true, 
+      comment: addedComment 
+    });
+  } catch (error) {
+    console.error('Error adding comment:', error);
+    res.status(500).json({ error: 'Error adding comment' });
+  }
+});
+// Get all comments for a post
+router.get('/:postId/comments', async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.postId)
+      .populate('comments.user', 'username image')
+      .select('comments');
+      
+    res.json({ 
+      success: true, 
+      comments: post.comments 
+    });
+  } catch (error) {
+    console.error('Error fetching comments:', error);
+    res.status(500).json({ error: 'Error fetching comments' });
+  }
+});
+
+// Delete a comment
+router.delete('/:postId/comments/:commentId', async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.postId);
+    
+    // Find the comment index
+    const commentIndex = post.comments.findIndex(
+      c => c._id.toString() === req.params.commentId
+    );
+    
+    if (commentIndex === -1) {
+      return res.status(404).json({ error: 'Comment not found' });
+    }
+    
+    // Check if user is the comment author or post owner
+    const comment = post.comments[commentIndex];
+    const isAuthor = comment.user.equals(req.session.user._id);
+    const isPostOwner = post.user.equals(req.session.user._id);
+    
+    if (!isAuthor && !isPostOwner) {
+      return res.status(403).json({ error: 'Not authorized to delete this comment' });
+    }
+    
+    // Remove the comment
+    post.comments.splice(commentIndex, 1);
+    await post.save();
+    
+    res.json({ 
+      success: true 
+    });
+  } catch (error) {
+    console.error('Error deleting comment:', error);
+    res.status(500).json({ error: 'Error deleting comment' });
+  }
+});
+
   module.exports = router;
 
 
