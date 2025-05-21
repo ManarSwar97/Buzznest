@@ -26,6 +26,7 @@ router.get("/new", async (req, res) => {
     res.redirect('/');
   }
 });
+
 router.post("/", upload.single('postImage'), async (req, res) => {
   try {
     const user = await User.findById(req.session.user._id);
@@ -39,8 +40,6 @@ router.post("/", upload.single('postImage'), async (req, res) => {
     // Create and save post
     const post = new Post(postData);
     await post.save();
-    console.log('New post created:', post); // Debug log
-
     postData.group = req.body.groupId;
 
     // Create and save post

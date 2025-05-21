@@ -153,8 +153,50 @@ router.get('/profile/:userId',  async (req, res) => {
     res.status(500).render('errors/500');
   }
 });
+router.get('/:userId', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    res.render('profile/profile.ejs', { user });
+  } catch (error) {
+    console.log(error);
+    res.redirect('/');
+  }
+});
 
-//comment
+router.get('/:userId/edit', async (req, res) => {
+  try {
+    const currentUser = await User.findById(req.params.userId);
+    res.render('profile/edit.ejs', {
+      profile: currentUser,
+    });
+  } catch (error) {
+    console.log(error);
+    res.redirect('/');
+  }
+});
 
+router.put('/:userId', upload.single('image'), async (req, res) => {
+  try {
+    const currentUser = await User.findById(req.params.userId);
+   const updatedData = {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      username: req.body.username,
+      email: req.body.email,
+    };
+
+    if (req.file) {
+      updatedData.image = req.file.filename;
+    }
+
+    await currentUser.updateOne(updatedData);
+
+    res.redirect(`/profile/${req.params.userId}`);
+
+  } catch (error) {
+    console.log(error);
+    res.redirect('/');
+  }
+});
 
 module.exports = router

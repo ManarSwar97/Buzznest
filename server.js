@@ -48,6 +48,7 @@ app.use(passUserToView)
 const authentication = require("./controllers/user")
 const postCtrl = require("./controllers/post")
 const groupController = require('./controllers/group')
+const profileRouter = require('./controllers/user');
 
 
 
@@ -60,6 +61,9 @@ app.use("/group", groupController);
 // With these:
 app.use("/posts", postCtrl); // Handles all /posts routes
 
+app.use('/profile', profileRouter);
+
+
 // Specific route for home page
 app.get("/home", isSignedIn, async (req, res) => {
   try {
@@ -69,9 +73,7 @@ app.get("/home", isSignedIn, async (req, res) => {
     console.error(error);
     res.redirect('/');
   }
-});app.get('/profile', async (req, res) => {
-  res.render('profile/profile.ejs') 
-})
+});
 
 app.get("/", (req, res) => {
   res.render("index.ejs");
