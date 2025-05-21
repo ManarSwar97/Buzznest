@@ -1,5 +1,5 @@
 <style>
-  body {
+ body {
     margin: 0;
     height: 100vh;
   }
@@ -11,7 +11,7 @@
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 20px 20px;
+    padding: 0px 20px;
     color: #9d99b1;
   }
 
@@ -22,15 +22,22 @@
     position: relative;
   }
 
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
   .header a,
   .main-header a,
   .sign-out a {
     color: white;
     text-decoration: none;
     margin: 0 10px;
-    font-size: 20px;
+    font-size: 25px;
     font-family: Georgia, 'Times New Roman', Times, serif;
   }
+
   .main-header {
     position: absolute;
     left: 50%;
@@ -43,6 +50,7 @@
 <nav>
   <div class="headerr">
     <div class="header">
+      <img src="/navbar/logo.png" width="100px" height="100px">
       <a href="/home">BuzzNest</a>
     </div>
     <div class="main-header">
