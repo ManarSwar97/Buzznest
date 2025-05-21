@@ -158,7 +158,6 @@ router.get('/:userId', async (req, res) => {
     const user = await User.findById(req.params.userId);
     res.render('profile/profile.ejs', { 
       user,
-      users: req.params.userId.toString(),
         });
   } catch (error) {
     console.log(error);
