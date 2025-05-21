@@ -5,9 +5,13 @@ const userSchema = new mongoose.Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     email: { type: String, required: true },
-    image: { type: String }
+    image: { type: String },
+    followingGroups: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'group'
+    }]
 }, {
-    timestamps: true // This adds createdAt and updatedAt fields
+    timestamps: true
 });
 
 const User = mongoose.model("User", userSchema)

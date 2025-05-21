@@ -4,9 +4,17 @@ const groupSchema = new mongoose.Schema({
     groupImage: String,
     game: String,
     user: { 
-      type: mongoose.Schema.Types.ObjectId, ref: 'User' 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User' 
     },
-    
+    followers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    followerCount: {
+        type: Number,
+        default: 0
+    }
 });
 
 module.exports = mongoose.model('group', groupSchema);
