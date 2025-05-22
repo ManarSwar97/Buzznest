@@ -1,3 +1,4 @@
+//import modules
 const dotenv = require('dotenv')
 dotenv.config()
 const express = require('express')
@@ -16,6 +17,7 @@ const isSignedIn = require('./middleware/is-signed-in')
 
 //checking the port
 const port = process.env.PORT ? process.env.PORT : "3000";
+//Database connection
 mongoose.connect(process.env.MONGODB_URI);
 mongoose.connection.on("connected", () => {
   console.log(`Connected to MongoDB ${mongoose.connection.name}.`);
@@ -44,7 +46,6 @@ app.use(
     })
   );
 app.use(passUserToView)
-
 const authentication = require("./controllers/user")
 const postCtrl = require("./controllers/post")
 const groupController = require('./controllers/group')
@@ -54,12 +55,10 @@ const profileRouter = require('./controllers/user');
 
 app.use("/auth", authentication);
 app.use("/posts", postCtrl);
-// Replace these lines:
-// app.use("/posts", postCtrl);
-// app.use("/home", isSignedIn, postCtrl);
+
 app.use("/group", groupController);
 // With these:
-app.use("/posts", postCtrl); // Handles all /posts routes
+app.use("/posts", postCtrl); 
 
 app.use('/profile', profileRouter);
 
@@ -80,20 +79,9 @@ app.get("/", (req, res) => {
 });
 app.use('/group', groupController);
 
-
-
-
-//comment
 app.get('/comments', async (req, res) => {
   res.render('comment/comment.ejs');
 });
-
-
-
-
-
-//just a small note
-
 
 
 app.listen(port, () => {

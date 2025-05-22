@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage: storage });
-
+//display new form to user
 router.get("/new", async (req, res) => {
   try {
     res.render("posts/new.ejs")
@@ -26,7 +26,7 @@ router.get("/new", async (req, res) => {
     res.redirect('/');
   }
 });
-
+//allow user to create new post
 router.post("/", upload.single('postImage'), async (req, res) => {
   try {
     const user = await User.findById(req.session.user._id);
@@ -37,16 +37,13 @@ router.post("/", upload.single('postImage'), async (req, res) => {
       user: user._id
     };
     postData.group = req.body.groupId;
-    // Create and save post
     const post = new Post(postData);
     await post.save();
     postData.group = req.body.groupId;
 
-    // Create and save post
     await post.save();
 
 
-    // Successful redirect
     return res.redirect(postData.group
       ? `/group/${postData.group}`
       : '/home'
@@ -57,7 +54,7 @@ router.post("/", upload.single('postImage'), async (req, res) => {
     res.redirect('/');
   }
 })
-
+//show a single post in the show.ejs page
 router.get('/:postId', async (req, res)=>{
     try{
         const showPost = await Post.findById(req.params.postId).populate('user').populate('likes.users', 'username');
@@ -73,21 +70,18 @@ router.get('/:postId', async (req, res)=>{
 
 
 
-// Like a post
+//show if the user like or unlike a post
 router.post('/:postId/like', async (req, res) => {
   try {
     const post = await Post.findById(req.params.postId);
     const userId = req.session.user._id;
 
-    // Check if user already liked the post
     const userIndex = post.likes.users.findIndex(id => id.equals(userId));
 
     if (userIndex === -1) {
-      // Add like
       post.likes.users.push(userId);
       post.likes.count += 1;
     } else {
-      // Remove like
       post.likes.users.splice(userIndex, 1);
       post.likes.count -= 1;
     }
@@ -96,7 +90,7 @@ router.post('/:postId/like', async (req, res) => {
     res.json({ 
       success: true, 
       likesCount: post.likes.count,
-      isLiked: userIndex === -1 // returns true if now liked, false if now unliked
+      isLiked: userIndex === -1 
     });
   } catch (error) {
     console.error('Error updating likes:', error);
@@ -104,7 +98,7 @@ router.post('/:postId/like', async (req, res) => {
   }
 });
 
-// Get like status for current user
+//check if the post is liked by the user or not
 router.get('/:postId/like-status', async (req, res) => {
   try {
     if (!req.session.user) {
@@ -121,7 +115,7 @@ router.get('/:postId/like-status', async (req, res) => {
   }
 });
 
-
+//load the post in the group page
 router.post('/:postId', async (req, res) => {
   try {
   const post = await Post.findById(req.params.postId)
@@ -129,7 +123,6 @@ router.post('/:postId', async (req, res) => {
   .populate('group')
   .populate('likes.users', 'username');
 
-    // Check if user already favorited the post
     const index = post.favoritedByUsers.findIndex((user) =>
       user.equals(req.session.user._id)
     );    
@@ -144,7 +137,7 @@ router.post('/:postId', async (req, res) => {
     res.status(500).send('Error updating favorites');
   }
 });
-
+//use to delete the post by the post id
 router.delete('/:postId', async(req, res)=>{
     try{
         const deletePost = await Post.findById(req.params.postId)
@@ -173,7 +166,7 @@ router.delete('/:postId', async(req, res)=>{
 router.put('/:postId', upload.single('postImage'), async (req, res) => {
     try {
         const postId = req.params.postId;
-        const groupId = req.body.groupId || req.body.group; // Handle both cases
+        const groupId = req.body.groupId || req.body.group; 
 
         const existingPost = await Post.findById(postId);
 
@@ -184,10 +177,9 @@ router.put('/:postId', upload.single('postImage'), async (req, res) => {
         let updateData = {
             postTitle: req.body.postTitle,
             postText: req.body.postText,
-            group: groupId // Use the groupId we extracted
+            group: groupId 
         };
 
-        // Handle image upload
         if (req.file) {
             updateData.postImage = req.file.filename;
         }
@@ -202,7 +194,6 @@ router.put('/:postId', upload.single('postImage'), async (req, res) => {
             return res.status(500).send('Failed to update post');
         }
 
-        // Redirect to the group page if groupId exists, otherwise home
         res.redirect(groupId ? `/group/${groupId}` : '/home');
     } catch (error) {
         console.error('Error updating post:', error);

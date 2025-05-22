@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }); 
 
-
+//show the sign-up page
 router.get("/sign-up", async (req, res) => {
   res.render("auth/sign-up.ejs");
 });
